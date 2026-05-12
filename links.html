@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Resource Links — Academic Competitions Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Syne+Mono&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:      #09090f;
+  --surf:    #0f0f1a;
+  --surf2:   #161625;
+  --border:  #1e1e30;
+  --border2: #2a2a40;
+  --text:    #dde0f0;
+  --muted:   #666888;
+  --accent:  #7c6ef7;
+  --r:       8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; }
+
+/* HEADER */
+header {
+  padding: 52px 44px 36px;
+  background: linear-gradient(135deg, #09090f 0%, #100f1f 100%);
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+header::after {
+  content:''; position:absolute; top:-60px; right:-80px;
+  width:400px; height:400px; border-radius:50%;
+  background: radial-gradient(circle, rgba(124,110,247,.07) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hdr { max-width: 1060px; margin: 0 auto; position: relative; }
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Syne Mono', monospace; font-size: 11px;
+  color: var(--muted); text-decoration: none; margin-bottom: 20px;
+  transition: color .15s;
+}
+.back-link:hover { color: var(--accent); }
+h1 { font-family: 'Syne', sans-serif; font-size: clamp(24px,3.5vw,36px); font-weight: 700; letter-spacing: -0.3px; margin-bottom: 8px; }
+h1 span { color: var(--accent); }
+.subtitle { color: var(--muted); font-size: 13px; font-weight: 300; margin-bottom: 28px; }
+.hdr-stats { display: flex; gap: 24px; flex-wrap: wrap; }
+.hstat { display: flex; flex-direction: column; }
+.hstat-n { font-family: 'Syne Mono', monospace; font-size: 20px; font-weight: 500; }
+.hstat-l { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+
+/* CONTROLS */
+.ctrl {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(9,9,15,.9); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 44px;
+}
+.ctrl-inner { max-width: 1060px; margin: 0 auto; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.srch { position: relative; flex: 1; min-width: 180px; max-width: 340px; }
+.srch svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+#search {
+  width: 100%; padding: 8px 11px 8px 34px;
+  background: var(--surf2); border: 1px solid var(--border2);
+  border-radius: 7px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px;
+  outline: none; transition: border-color .18s;
+}
+#search:focus { border-color: var(--accent); }
+#search::placeholder { color: var(--muted); }
+.cnt { font-family: 'Syne Mono', monospace; font-size: 11px; color: var(--muted); margin-left: auto; }
+
+/* MAIN */
+.main { max-width: 1060px; margin: 0 auto; padding: 28px 44px 80px; }
+
+/* CAT PILLS */
+.pills { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 28px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 13px; border-radius: 999px;
+  border: 1px solid var(--border2); background: var(--surf);
+  font-size: 11.5px; cursor: pointer; color: var(--muted);
+  transition: all .15s; user-select: none;
+}
+.pill:hover { color: var(--text); }
+.pill.active { color: #fff; border-color: transparent; }
+.pill-n { font-family: 'Syne Mono', monospace; font-size: 10px; background: rgba(255,255,255,.1); border-radius: 999px; padding: 1px 6px; }
+
+/* SECTION */
+.sec-hdr {
+  display: flex; align-items: center; gap: 10px;
+  padding: 16px 0 12px; border-bottom: 1px solid var(--border);
+  margin: 20px 0 0;
+}
+.sec-icon { font-size: 16px; }
+.sec-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 600; }
+.sec-cnt { margin-left: auto; font-family: 'Syne Mono', monospace; font-size: 10px; color: var(--muted); }
+
+/* URL GRID */
+.url-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; padding: 14px 0; }
+
+.url-card {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 14px 16px;
+  background: var(--surf); border: 1px solid var(--border);
+  border-radius: var(--r);
+  transition: border-color .15s, transform .15s, background .15s;
+  animation: popIn .2s ease both;
+  text-decoration: none;
+}
+@keyframes popIn { from { opacity:0; transform: scale(.97); } to { opacity:1; transform: scale(1); } }
+.url-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  background: var(--surf2);
+}
+.url-card.hidden { display: none; }
+.card-label {
+  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600;
+  color: var(--text); line-height: 1.3;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+}
+.card-label svg { flex-shrink: 0; margin-top: 2px; color: var(--muted); transition: color .15s; }
+.url-card:hover .card-label svg { color: var(--accent); }
+.card-url {
+  font-family: 'Syne Mono', monospace; font-size: 10px; color: var(--muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.card-ctx {
+  font-size: 11px; color: var(--muted); line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  border-top: 1px solid var(--border); padding-top: 7px; margin-top: 2px;
+}
+
+/* EMPTY */
+#empty { display: none; text-align: center; padding: 60px 20px; color: var(--muted); }
+
+@media (max-width: 600px) {
+  header, .ctrl, .main { padding-left: 18px; padding-right: 18px; }
+  .url-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr">
+    <a class="back-link" href="index.html">← Back to overview</a>
+    <h1>Resource <span>Links</span></h1>
+    <p class="subtitle">All URLs cited in <em>Academic Competitions</em> · Escalante &amp; Kruchinina · DMLR 2023</p>
+    <div class="hdr-stats">
+      <div class="hstat"><span class="hstat-n" id="total-n">119</span><span class="hstat-l">Total Links</span></div>
+      <div class="hstat"><span class="hstat-n">12</span><span class="hstat-l">Categories</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="ctrl">
+  <div class="ctrl-inner">
+    <div class="srch">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input id="search" type="text" placeholder="Search name or URL…" autocomplete="off"/>
+    </div>
+    <span class="cnt" id="result-cnt"></span>
+  </div>
+</div>
+
+<div class="main">
+  <div class="pills" id="pills"></div>
+  <div id="list-root"></div>
+  <div id="empty"><p style="font-size:32px;margin-bottom:12px">🔍</p><p>No links match your search.</p></div>
+</div>
+
+<script>
+const URLS = [
+  {url:'https://autodl.chalearn.org/',label:'AutoDL Challenge Series',cat:'Competition Platforms',ctx:'eries focused on tabular data, but it then evolved to deal with raw heterogeneous data in the AutoDL'},
+  {url:'https://chalearnlap.cvc.uab.cat/',label:'ChaLearn Looking at People (LAP)',cat:'Competition Platforms',ctx:'-the-art, these are reviewed in the following lines.    The ChaLearn Looking at People (ChaLearn LAP'},
+  {url:'http://chalearn.org/',label:'ChaLearn Organization',cat:'Competition Platforms',ctx:'also offers learning, hiring and data-code sharing options. From the academic side, in 2011 ChaLearn'},
+  {url:'https://codalab.lisn.fr/',label:'CodaLab LISN Platform',cat:'Competition Platforms',ctx:'o slow down in 2021, but did you take into account the competitions organized on'},
+  {url:'https://metalearning.chalearn.org/',label:'Cross-Domain MetaDL Challenge',cat:'Competition Platforms',ctx:'ote  challenge series, whose  latest edition is the  Cross-Domain MetaDL challenge 2022~'},
+  {url:'https://dynabench.org/',label:'Dynabench Platform',cat:'Competition Platforms',ctx:'format asks participants not merely to improve an existing dataset but to  a new one. The Dynabench~'},
+  {url:'https://www.kaggle.com/c/higgs-boson',label:'Higgs Boson ML Challenge (Kaggle)',cat:'Competition Platforms',ctx:', but there is also Math and Chemistry. At any rate: mention the CERN challenges'},
+  {url:'https://kaggle.com/',label:'Kaggle Platform',cat:'Competition Platforms',ctx:'ges that emerged, but also because of the establishment of organizations. It was in 2009 that Kaggle'},
+  {url:'https://www.kaggle.com/',label:'Kaggle Platform',cat:'Competition Platforms',ctx:'$^*$&1&\\\\ XPrize$^*$&MS&1996&2&\\\\  Kaggle&MS&2009&-&'},
+  {url:'https://www.kaggle. com/c/higgs-boson',label:'kaggle. com — higgs-boson',cat:'Competition Platforms',ctx:'u decay) or a background (other events which are not the aim of the study). The competition was held'},
+  {url:'https://www.aicrowd.com/challenges/neurips-2019-learn-to-move-walk-around',label:'Learn to Move — Walk Around (NeurIPS 2019)',cat:'Competition Platforms',ctx:'s~, this challenge was run for two more editions, the last one being the Learn to Move - Walk Around'},
+  {url:'https://www.aicrowd.com/challenges/nips-2017-learning-to-run',label:'Learning to Run (NeurIPS 2017)',cat:'Competition Platforms',ctx:'the track. The first competition in the program around this topic was the Learning to Run challenge'},
+  {url:'https://l2rpn.chalearn.org/',label:'Learning to Run a Power Network (L2RPN)',cat:'Competition Platforms',ctx:'the Real robot challenge series with two editions, the Learning to run a power network competition'},
+  {url:'https://www.kaggle.com/c/msk-redefining-cancer-treatment',label:'MSK Cancer Treatment Challenge (Kaggle)',cat:'Competition Platforms',ctx:'tance the     %During the first editions, topics were most varied with challenges on classification~'},
+  {url:'https://openreview.net/forum?id=Oc1taS2iYd',label:'Paper on OpenReview',cat:'Competition Platforms',ctx:'relevant if it is yet being reviewed, i.e., [twoside,11pt, preprint]article'},
+  {url:'https://www.springer.com/series/15602',label:'Springer: Challenges in Machine Learning Series',cat:'Competition Platforms',ctx:'results of challenges are published (consider for instance the Challenges in Machine Learning series'},
+  {url:'https://mlcontests.com/state-of-competitive-machine-learning-2022/',label:'State of Competitive ML 2022',cat:'Competition Platforms',ctx:'rIPS competitions; you\'re welcome to republish them here if you cite the source:'},
+  {url:'https://mlcontests.com/state-of-machine-learning-competitions-2024/',label:'State of ML Competitions 2024',cat:'Competition Platforms',ctx:'a gathered from  , a platform with a community focused on academic competitions recognized'},
+  {url:'https://automl.cc/',label:'AutoML Conference',cat:'ML Conferences & Workshops',ctx:'arch topic within machine learning (there is a dedicated  AutoML conference with a competition track'},
+  {url:'https://www.cs.cmu.edu/~automl-decathlon-22/',label:'AutoML Decathlon Challenge',cat:'ML Conferences & Workshops',ctx:'m/view/pgdl2020, two editions of the Meta-DL challenge~ and the AutoML Decathlon'},
+  {url:'https://bbochallenge.com/',label:'Black-Box Optimization Challenge',cat:'ML Conferences & Workshops',ctx:'sabelle and NeurIPS causality challenges %Challenges in optimization'},
+  {url:'https://www.cikm2022.org',label:'CIKM 2022',cat:'ML Conferences & Workshops',ctx:'ICASSP&SP&2014&8&\\\\ ICME&MIP&2015&2&\\\\ CIKM&DM&2017&2&'},
+  {url:'https://gecco-2022.sigevo.org/HomePage',label:'GECCO 2022',cat:'ML Conferences & Workshops',ctx:'03&4&\\\\ MediaEval&MIP&2003&11&\\\\ GECCO&EC&2004&10&'},
+  {url:'https://2022.ieeeicassp.org/',label:'ICASSP 2022',cat:'ML Conferences & Workshops',ctx:'9&\\\\ ICMI&MIP&2013&1&\\\\ ICASSP&SP&2014&8&'},
+  {url:'https://2022.ieeeicme.org/',label:'ICME 2022',cat:'ML Conferences & Workshops',ctx:'CMI&MIP&2013&1&\\\\ ICASSP&SP&2014&8&\\\\ ICME&MIP&2015&2&'},
+  {url:'https://icmi.acm.org/2022/',label:'ICMI 2022',cat:'ML Conferences & Workshops',ctx:'&12&\\\\ IROS&RO&2012&9&\\\\ ICMI&MIP&2013&1&'},
+  {url:'https://www.icpr2022.com/',label:'ICPR 2022',cat:'ML Conferences & Workshops',ctx:'https://www.icra2022.org/\\\\ ACM Multimedia&MIP&2009&10&\\\\ ICPR&PR&2010&7&'},
+  {url:'https://www.ijcai.org/',label:'IJCAI',cat:'ML Conferences & Workshops',ctx:'&IP&2017&4&\\\\ NeurIPS&ML&2018&25&\\\\ IJCAI&AI&2018&4&'},
+  {url:'https://papers.nips.cc/paper/2004/hash/5e751896e527c862bf67251a474b3819-Abstract.html',label:'NeurIPS 2003 Feature Selection (Paper)',cat:'ML Conferences & Workshops',ctx:'video retrieval, respectively.  % The NeurIPS 2003 feature selection challenge'},
+  {url:'http://clopinet.com/isabelle/Projects/NIPS2003/',label:'NeurIPS 2003 Feature Selection Challenge',cat:'ML Conferences & Workshops',ctx:'build and evaluate solutions by themselves. The NeurIPS 2003 feature selection challenge took place'},
+  {url:'http://clopinet.com/isabelle/Projects/NIPS2006/home.html',label:'NeurIPS 2006 Model Selection Challenge',cat:'ML Conferences & Workshops',ctx:'challenges. All of these efforts and others that evolved over the years (e.g.,  the model selection'},
+  {url:'https://neurips.cc/Conferences',label:'NeurIPS Conferences',cat:'ML Conferences & Workshops',ctx:'\\\\ CIKM&DM&2017&2&\\\\ ICIP&IP&2017&4&\\\\ NeurIPS&ML&2018&25&'},
+  {url:'http://host.robots.ox.ac.uk/pascal/VOC/index.html',label:'PASCAL VOC Challenge',cat:'ML Conferences & Workshops',ctx:'% CLEF  % The PASCAL Visual Objects challenge  % NeurIPS - check proposals   %'},
+  {url:'https://wcci2022.org/accepted-competitions/',label:'WCCI 2022 Competitions',cat:'ML Conferences & Workshops',ctx:'rlhttps://multimediaeval.github.io/\\\\ GECCO&EC&2004&10&\\\\ WCCI&CI&2006&13&'},
+  {url:'https://www.xprize.org/',label:'X Prize Foundation',cat:'ML Conferences & Workshops',ctx:'https://automl.cc/\\\\   Loingitude Prize&MS&1714$^*$&1&\\\\ XPrize$^*$&MS&1996&2&'},
+  {url:'https://humane-intelligence.org/get-involved/events/defcon-2023-overview/',label:'DEF CON 2023 AI Red Teaming',cat:'LLM & AI Safety',ctx:'wd-sourcing mechanism for safety research.  In this context, the Generative AI red teaming challenge'},
+  {url:'https://metr.org/',label:'METR / ARC-Evals (AI Safety)',cat:'LLM & AI Safety',ctx:'ad been difficult to study without a curated competition framework.  Similarly, the ARC-Evals / METR'},
+  {url:'https://sites.google.com/view/pgdl2020',label:'Predicting Generalization in Deep Learning',cat:'LLM & AI Safety',ctx:', the black-box optimization competition~, the predicting generalization in deep learning challenge~'},
+  {url:'https://trojandetection.ai/',label:'Trojan Detection Challenge (NeurIPS)',cat:'LLM & AI Safety',ctx:'the explicit attention paid to   safety and alignment. For instance, the Trojan Detection Challenge'},
+  {url:'http://activity-net.org/challenges/2022/',label:'activity-net.org — 2022',cat:'Computer Vision',ctx:'challenge that ran in 2020 and is now a testbed for emotion recognition, the ActivityNet  challenge~'},
+  {url:'https://cocodataset.org',label:'COCO Dataset & Challenge',cat:'Computer Vision',ctx:'of directions within computer vision and affective computing.   The Common Objects in COntext  (COCO'},
+  {url:'https://cbcsl.ece.ohio-state.edu/enc-2020/index.html',label:'EmotioNet Challenge 2020',cat:'Computer Vision',ctx:'ine grained classification workshop~ that has  run a competition program since 2017, the EmotioNet'},
+  {url:'https://en.wikipedia.org/wiki/International_Conference_on_Document_Analysis_and_Recognition',label:'en.wikipedia.org — International_Conference_on_Document_Analysis_and_Recognition',cat:'Computer Vision',ctx:'organized in conjunction with ICDAR (International Conference on Document Analysis and Recognition)'},
+  {url:'https://sites.google.com/view/fgvc9',label:'Fine-Grained Visual Categorization Workshop',cat:'Computer Vision',ctx:'question answering competition running from 2016 to 2021, the fine grained classification workshop~'},
+  {url:'https://visualqa.org/',label:'Visual Question Answering (VQA)',cat:'Computer Vision',ctx:'on image restoration, super resolution and enhancement~ , the visual question answering competition'},
+  {url:'https://www.clef-initiative.eu/web/clef-initiative/',label:'CLEF Initiative',cat:'NLP & Information Retrieval',ctx:'edition of evaluation efforts that are still being run were launched, for instance, the first: CLEF'},
+  {url:'https://ecmlpkdd.org/',label:'ECML/PKDD',cat:'NLP & Information Retrieval',ctx:'trec.nist.gov/\\\\ ICDAR&PR&1993&13&\\\\ KDD&DM&1997&2&\\\\ ECML&ML&1999&3&'},
+  {url:'https://www.evalita.it/campaigns/evalita-2022/',label:'EVALITA 2022 (Italian NLP)',cat:'NLP & Information Retrieval',ctx:'workshop series,   Likewise, there are forums dedicated to specific languages, for example, Evalita'},
+  {url:'https://germeval.github.io/',label:'GermEval (German NLP)',cat:'NLP & Information Retrieval',ctx:'//www.evalita.it/campaigns/evalita-2022/ (for Italian), IberLEF (for Spanish) and GermEval'},
+  {url:'https://sites.google.com/view/iberlef2022',label:'IberLEF 2022 (Spanish NLP)',cat:'NLP & Information Retrieval',ctx:'are forums dedicated to specific languages, for example, Evalita (for Italian), IberLEF'},
+  {url:'https://icdar2023.org/',label:'ICDAR 2023',cat:'NLP & Information Retrieval',ctx:'textbfSince&&\\\\  TREC&IR&1993&7&\\\\ ICDAR&PR&1993&13&'},
+  {url:'https://www.imageclef.org/',label:'ImageCLEF',cat:'NLP & Information Retrieval',ctx:'ance, the first: CLEF (2000),   ImageCLEF'},
+  {url:'https://www.imageclef.org',label:'ImageCLEF',cat:'NLP & Information Retrieval',ctx:'LP&2000&4&\\\\ TrecVid&MIR&2003&8&\\\\ ImageCLEF$$&MIP&2003&4&'},
+  {url:'https://iros2022.org/program/competition/',label:'IROS 2022 Competitions',cat:'NLP & Information Retrieval',ctx:'ICPR&PR&2010&7&\\\\ SemEval&NLP&2010&12&\\\\ IROS&RO&2012&9&'},
+  {url:'https://kdd.org/',label:'KDD Conference',cat:'NLP & Information Retrieval',ctx:'L\\\\  TREC&IR&1993&7&\\\\ ICDAR&PR&1993&13&\\\\ KDD&DM&1997&2&'},
+  {url:'https://longitudeprize.org/',label:'Longitude Prize',cat:'NLP & Information Retrieval',ctx:'//www.nist.gov/  (NIST) and the latest editions of the X-Prize Challenge and the  Longitude Prize'},
+  {url:'https://multimediaeval.github.io/',label:'MediaEval Benchmark',cat:'NLP & Information Retrieval',ctx:'&8&\\\\ ImageCLEF$$&MIP&2003&4&\\\\ MediaEval&MIP&2003&11&'},
+  {url:'https://www.nist.gov/',label:'NIST',cat:'NLP & Information Retrieval',ctx:'r for instance the funded challenges organized by the National Institute of Standards and Technology'},
+  {url:'http://host.robots.ox.ac.uk/pascal/VOC/',label:'PASCAL VOC Challenge',cat:'NLP & Information Retrieval',ctx:'ImageCLEF forum (2003),  TRECVID conference (2003),  PASCAL VOC'},
+  {url:'https://semeval.github.io/',label:'SemEval Shared Tasks',cat:'NLP & Information Retrieval',ctx:'his evaluation model actually is still popular among text-based evaluation forums (see e.g., SemEval'},
+  {url:'http://trecrts.github.io/',label:'TREC Real-Time Summarization',cat:'NLP & Information Retrieval',ctx:'he TREC campaign are: question answering~, adaptive filtering~, text summarization~'},
+  {url:'https://trec.nist.gov/',label:'TREC — Text REtrieval Conference',cat:'NLP & Information Retrieval',ctx:'rccccc  &&&&\\\\  TREC&IR&1993&7&'},
+  {url:'https://trecvid.nist.gov/',label:'TRECVid — Video Retrieval',cat:'NLP & Information Retrieval',ctx:'ote (2000),   ImageCLEF forum (2003),  TRECVID'},
+  {url:'http://yann.lecun.com/exdb/mnist/',label:'Yann LeCun\'s MNIST Benchmark Page',cat:'NLP & Information Retrieval',ctx:'shed the MNIST benchmark as a reference problem for supervised learning (see e.g., Yann Lecun\'s site'},
+  {url:'https://www.duckietown.org/research/AI-Driving-olympics',label:'AI Driving Olympics (AI-DO)',cat:'Robotics & Autonomous Systems',ctx:'g systems running in simulation and small physical vehicles tested live during the competition track'},
+  {url:'https://carla.org/',label:'CARLA simulator',cat:'Robotics & Autonomous Systems',ctx:'CARLA simulator'},
+  {url:'https://www.darpa.mil/news-events/2014-03-13',label:'DARPA Grand Challenge History',cat:'Robotics & Autonomous Systems',ctx:'xample %consider for instance  the DARPA (Defense Advanced Research Projects Agency) grand challenge'},
+  {url:'https://www.duckietown.org/',label:'Duckietown Platform',cat:'Robotics & Autonomous Systems',ctx:'BLP:journals/corr/abs-1803-08652, deep reinforcement learning~, robotics'},
+  {url:'https://minerl.io/',label:'MineRL Challenge',cat:'Robotics & Autonomous Systems',ctx:'duckietown.org/research/AI-Driving-olympics.     % . Dealing with       MineRL'},
+  {url:'https://www.nist.gov/itl/iad/mig/past-hlt-evaluation-projects',label:'NIST Past HLT Evaluation Projects',cat:'Robotics & Autonomous Systems',ctx:'://germeval.github.io/.   In terms of speech, there were several efforts from DARPA~ and NIST'},
+  {url:'https://pan.webis.de/',label:'PAN @ CLEF (NLP)',cat:'Robotics & Autonomous Systems',ctx:'ML&ML&1999&3&\\\\ RoboCup&RO&1997&5&\\\\ PAN-CLEF$$&NLP&2000&4&'},
+  {url:'https://www.pommerman.com/',label:'Pommerman Challenge',cat:'Robotics & Autonomous Systems',ctx:'two editions, the Learning to run a power network competition and the two editions of the Pommerman'},
+  {url:'https://real-robot-challenge.com/',label:'Real Robot Challenge',cat:'Robotics & Autonomous Systems',ctx:'challenges addressing different tasks are %the reconnaissance blind chess,  the Real robot challenge'},
+  {url:'https://www.robocup.org/',label:'RoboCup',cat:'Robotics & Autonomous Systems',ctx:'icdar2023.org/\\\\ KDD&DM&1997&2&\\\\ ECML&ML&1999&3&\\\\ RoboCup&RO&1997&5&'},
+  {url:'https://2022.robocup.org/',label:'RoboCup 2022',cat:'Robotics & Autonomous Systems',ctx:'olved in the type of tasks addressed in the context of the challenge. For instance, the 2022 edition'},
+  {url:'https://www.iarai.ac.at/traffic4cast/',label:'Traffic4cast Challenge',cat:'Robotics & Autonomous Systems',ctx:'challenges that have been part of the competition track for more than 2 editions are the following:'},
+  {url:'https://2022.acmmm.org/grand-challenges/',label:'ACM Multimedia 2022 Grand Challenges',cat:'Biology & Medical Imaging',ctx:'008&2&\\\\ ICRA&RO&2008&10&\\\\ ACM Multimedia&MIP&2009&10&'},
+  {url:'https://www.science.org/content/article/game-has-changed-ai-triumphs-solving-protein-structures',label:'AlphaFold 2020',cat:'Biology & Medical Imaging',ctx:'AlphaFold 2020'},
+  {url:'https://sagebionetworks.org/research-projects/dream-challenges-powered-by-sage-bionetworks/',label:'DREAM Challenges (Sage Bionetworks)',cat:'Biology & Medical Imaging',ctx:'and achieves 7.5 ∼ 9.5× speedup for long-sequence inference . %DREAM challenges'},
+  {url:'https://dreamchallenges.org/closed-challenges/',label:'DREAM Challenges Archive',cat:'Biology & Medical Imaging',ctx:'of which are associated to medical image analysis. A related effort is that of the DREAM challenges'},
+  {url:'https://dreamchallenges.org/astrazeneca-sanger-drug-combination-prediction-dream-challenge/',label:'DREAM: Drug Combination Challenge',cat:'Biology & Medical Imaging',ctx:'edical documents with NLP, to drug analysis and combination'},
+  {url:'https://dreamchallenges.org/electronic-medical-record-nlp-dream-challenge/',label:'DREAM: Medical NLP Challenge',cat:'Biology & Medical Imaging',ctx:'ons, to disease susceptibility, to analyzing medical documents with NLP'},
+  {url:'https://dreamchallenges.org/respiratory-viral-dream-challenge/',label:'DREAM: Respiratory Viral Challenge',cat:'Biology & Medical Imaging',ctx:'rca2020.06.05.130971 and monitoring~ damage caused by certain conditions, to disease susceptibility'},
+  {url:'https://grand-challenge.org/',label:'Grand Challenge Platform',cat:'Biology & Medical Imaging',ctx:'lleDREAM challenges ;'},
+  {url:'https://grand-challenge.org/challenges/',label:'Grand Challenge Platform (Medical Imaging)',cat:'Biology & Medical Imaging',ctx:'there are  platforms associated with challenges in biology and medical sciences. The Grand Challenge'},
+  {url:'https://2020.ieeeicip.org/general/about/',label:'ICIP 2020',cat:'Biology & Medical Imaging',ctx:'claim, only one frame is enough to classify the distortion) . %'},
+  {url:'https://2020.ieeeicip.org/challenge/',label:'ICIP 2020 Challenges',cat:'Biology & Medical Imaging',ctx:'y the distortion) . % https://2020.ieeeicip.org/general/about/,'},
+  {url:'https://2020.ieeeicip.org/challenge/real-time-distortion-classification-in-laparoscopic-videos/',label:'ICIP 2020 Laparoscopic Video Challenge',cat:'Biology & Medical Imaging',ctx:'cation in laparoscopic videos was organized with %the 27th IEEE International Conference ( ICIP 2020'},
+  {url:'https://2022.ieeeicip.org/',label:'ICIP 2022',cat:'Biology & Medical Imaging',ctx:'g/\\\\ ICME&MIP&2015&2&\\\\ CIKM&DM&2017&2&\\\\ ICIP&IP&2017&4&'},
+  {url:'https://www.icra2022.org/',label:'ICRA 2022',cat:'Biology & Medical Imaging',ctx:'s://conferences.miccai.org/2022/en/\\\\ Interspeech&SP&2008&2&\\\\ ICRA&RO&2008&10&'},
+  {url:'https://interspeech2022.org/',label:'Interspeech 2022',cat:'Biology & Medical Imaging',ctx:'2.org/accepted-competitions/\\\\ MICCAI&MI&2007&38&\\\\ Interspeech&SP&2008&2&'},
+  {url:'https://biomedicalimaging.org/2019/challenges/',label:'ISBI 2019 Challenges',cat:'Biology & Medical Imaging',ctx:'ological and biomedical imaging, across all scales of observation\'\',  nine challenges were organized'},
+  {url:'https://conferences.miccai.org/2022/en/',label:'MICCAI 2022',cat:'Biology & Medical Imaging',ctx:'gecco-2022.sigevo.org/HomePage\\\\ WCCI&CI&2006&13&\\\\ MICCAI&MI&2007&38&'},
+  {url:'https://cause07.grand-challenge.org/Results/',label:'MICCAI Grand Challenge 2007',cat:'Biology & Medical Imaging',ctx:'remier forum is the  grand challenge series associated to the MICCAI conference, running since 2007~'},
+  {url:'http://www.causality.inf.ethz.ch/',label:'Causality Workbench (ETH Zürich)',cat:'Data Mining & ML Competitions',ctx:'96e527c862bf67251a474b3819-Abstract.html. The KDD cups. The causality workbench'},
+  {url:'https://sorry.vse.cz/~berka/challenge/PAST/',label:'ECML/PKDD Discovery Challenge Archive',cat:'Data Mining & ML Competitions',ctx:'one of the long-lived competition programs in the context  of machine learning  arose in this decade'},
+  {url:'https://kdd.org/kdd-cup',label:'KDD Cup',cat:'Data Mining & ML Competitions',ctx:'ling, recommendation and customer analysis to authorship analysis and student performance evaluation'},
+  {url:'https://www.kdd.org/kdd-cup/view/kdd-cup-1997',label:'KDD Cup 1997',cat:'Data Mining & ML Competitions',ctx:'f fields like  natural language processing~, machine learning~ and  knowledge discovery in databases'},
+  {url:'https://kdd.org/kdd-cup##',label:'kdd.org — kdd-cup',cat:'Data Mining & ML Competitions',ctx:'their respective fields. %Additionally, we can mention KDD Cup (Knowledge Discovery and Data Mining)'},
+  {url:'https://kdd.org/kdd-cup#',label:'kdd.org — kdd-cup',cat:'Data Mining & ML Competitions',ctx:'rnational\\_Conference\\_on\\_Document\\_Analysis\\_and\\_Recognition. %Also "old":'},
+  {url:'https://www.netflixprize.com/',label:'Netflix Prize',cat:'Data Mining & ML Competitions',ctx:'gh problems with the help from the community. It was during this time that the popular Netflix prize'},
+  {url:'https://github.com/facebookresearch/qmnist',label:'QMNIST (GitHub)',cat:'Data Mining & ML Competitions',ctx:'d in progress in the field without any doubt. KDD Cups are reviewed in the next chapter.    % QMNIST'},
+  {url:'https://www.general-ai-challenge.org/',label:'General AI Challenge (GoodAI)',cat:'Government & Prize Challenges',ctx:'efforts aiming to have a positive societal impact. For instance the general challenge by the GoodAI'},
+  {url:'https://www.nasa.gov/solve/history-of-challenges',label:'NASA Prize Challenges History',cat:'Government & Prize Challenges',ctx:'s of pounds.   This form of incentive has guided several other competitions organized by governments'},
+  {url:'https://www.xprize.org/challenges',label:'X Prize Challenges',cat:'Government & Prize Challenges',ctx:'onal Institute of Standards and Technology  (NIST) and the latest editions of the X-Prize Challenge'},
+  {url:'http://opendata.cern.ch/record/328',label:'CERN Open Data: HiggsML Dataset',cat:'Physical Sciences',ctx:'he complete HiggsML dataset with full 818.238 events was released afterwards and can be found online'},
+  {url:'https://sites.google.com/site/trackmlparticle/',label:'TrackML Particle Physics Challenge',cat:'Physical Sciences',ctx:'ere is also Math and Chemistry. At any rate: mention the CERN challenges  and'},
+  {url:'https://arxiv.org/pdf/2201.03801.pdf',label:'arXiv: Challenge Design Paper',cat:'Papers & Reports',ctx:'d bias in data + debias  % design API or interface to decouple various aspects'},
+  {url:'https://arxiv.org/abs/1804.00361',label:'arXiv: Learning to Run Solutions',cat:'Papers & Reports',ctx:'rIPS causality challenges %, in RL Learning to run'},
+  {url:'https://www.forbes.com/sites/forbestechcouncil/2019/11/15/data-is-the-new-oil-and-thats-a-good-thing/?sh=381ec30d7304',label:'Forbes: Data is the New Oil',cat:'Papers & Reports',ctx:'competitions, see~.         has been a popular say recently'},
+  {url:'https://ieeexplore.ieee.org/document/9415128',label:'IEEE: Distortion Classification Paper',cat:'Papers & Reports',ctx:'rk that is widely used by the community.   %'},
+  {url:'http://www.jmlr.org/format/natbib.pdf',label:'JMLR NatBib Format Guide',cat:'Papers & Reports',ctx:'citation styles, see the natbib documentation, a copy of which % is archived at'},
+  {url:'http://www.jmlr.org/papers/',label:'JMLR Papers',cat:'Papers & Reports',ctx:'ext few years.        %     %  Remainder omitted in this sample. See'},
+  {url:'https://doi.org/10.48550/arxiv.2012.08520',label:'ML Scientific Competitions Survey',cat:'Papers & Reports',ctx:'or the detailed descriptions , ,'},
+  {url:'https://doi.org/10.48550/arxiv.2208.14686',label:'NeurIPS MetaDL Competition 2022',cat:'Papers & Reports',ctx:'022~~elbaz2021metadl, elbaz:hal-03688638,'},
+  {url:'https://https-deeplearning-ai.github.io/data-centric-comp',label:'Data-Centric AI Competition',cat:'Other Resources',ctx:'liable competitions for this topic represents a major opportunity.      % Data centric competitions'},
+  {url:'https://www.esann.org/program',label:'ESANN Program',cat:'Other Resources',ctx:'ors of the article ``Filtering participants improves generalization in competitions and benchmarks``'},
+  {url:'https://https-deeplearning-ai.github.io/data-centric-comp/?utm_source=thebatch&utm_medium=newsletter&utm_campaign=dc-ai-competition&utm_content=dl-ai',label:'https-deeplearning-ai.github.io — data-centric-comp',cat:'Other Resources',ctx:'years. Open issues, trends, opportunities, etc.   % Data centric competitions  %'},
+  {url:'http://www.modelselect.inf.ethz.ch/',label:'Model Selection Challenge (ETH)',cat:'Other Resources',ctx:'evolved over the years (e.g.,  the model selection and performance prediction'}
+];
+
+const CAT_META = [
+  {name:"Competition Platforms",icon:"🏟",color:"#6366f1"},
+  {name:"ML Conferences & Workshops",icon:"📐",color:"#8b5cf6"},
+  {name:"LLM & AI Safety",icon:"🤖",color:"#ec4899"},
+  {name:"Computer Vision",icon:"👁",color:"#f59e0b"},
+  {name:"NLP & Information Retrieval",icon:"📝",color:"#ef4444"},
+  {name:"Robotics & Autonomous Systems",icon:"🚗",color:"#10b981"},
+  {name:"Biology & Medical Imaging",icon:"🧬",color:"#14b8a6"},
+  {name:"Data Mining & ML Competitions",icon:"⛏",color:"#0ea5e9"},
+  {name:"Government & Prize Challenges",icon:"🏆",color:"#f97316"},
+  {name:"Physical Sciences",icon:"⚛",color:"#64748b"},
+  {name:"Papers & Reports",icon:"📄",color:"#a78bfa"},
+  {name:"Other Resources",icon:"🔗",color:"#94a3b8"}
+];
+const catMap = Object.fromEntries(CAT_META.map(c=>[c.name,c]));
+let activeFilter = 'all';
+
+// Build pills
+const pillsEl = document.getElementById('pills');
+const allPill = Object.assign(document.createElement('button'),{className:'pill active',textContent:''});
+allPill.innerHTML = `All <span class="pill-n">${URLS.length}</span>`;
+allPill.dataset.cat = 'all';
+allPill.onclick = () => setFilter('all', allPill);
+pillsEl.appendChild(allPill);
+
+CAT_META.forEach(c => {
+  const cnt = URLS.filter(u=>u.cat===c.name).length;
+  if (!cnt) return;
+  const btn = document.createElement('button');
+  btn.className = 'pill'; btn.dataset.cat = c.name;
+  btn.innerHTML = `${c.icon} ${c.name} <span class="pill-n">${cnt}</span>`;
+  btn.onclick = () => setFilter(c.name, btn);
+  pillsEl.appendChild(btn);
+});
+
+function setFilter(cat, el) {
+  activeFilter = cat;
+  document.querySelectorAll('.pill').forEach(p => {
+    p.classList.remove('active'); p.style.background = ''; p.style.borderColor = ''; p.style.color = '';
+  });
+  el.classList.add('active');
+  if (cat !== 'all') {
+    const c = catMap[cat];
+    el.style.background = c.color; el.style.borderColor = c.color; el.style.color = '#fff';
+  }
+  render();
+}
+
+function getFiltered() {
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  return URLS.filter(u => {
+    if (activeFilter !== 'all' && u.cat !== activeFilter) return false;
+    if (!q) return true;
+    return (u.label + u.url + u.ctx + u.cat).toLowerCase().includes(q);
+  });
+}
+
+function makeCard(u, idx) {
+  const domain = (() => { try { return new URL(u.url).hostname.replace('www.',''); } catch(e) { return u.url; } })();
+  const ctx = u.ctx ? `<div class="card-ctx">${u.ctx.replace(/</g,'&lt;')}</div>` : '';
+  return `<a class="url-card" href="${u.url}" target="_blank" rel="noopener" style="animation-delay:${Math.min(idx*12,200)}ms">
+    <div class="card-label">
+      <span>${u.label}</span>
+      <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+        <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+      </svg>
+    </div>
+    <div class="card-url">${domain}</div>
+    ${ctx}
+  </a>`;
+}
+
+function render() {
+  const data = getFiltered();
+  const root = document.getElementById('list-root');
+  const empty = document.getElementById('empty');
+  document.getElementById('result-cnt').textContent = `${data.length} / ${URLS.length}`;
+  if (!data.length) { root.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display = 'none';
+
+  const groups = {};
+  data.forEach(u => { (groups[u.cat] = groups[u.cat]||[]).push(u); });
+
+  let html = '';
+  CAT_META.forEach(c => {
+    const items = groups[c.name];
+    if (!items?.length) return;
+    html += `<div class="sec-hdr">
+      <span class="sec-icon">${c.icon}</span>
+      <span class="sec-title" style="color:${c.color}">${c.name}</span>
+      <span class="sec-cnt">${items.length}</span>
+    </div>
+    <div class="url-grid">`;
+    items.forEach((u,i) => { html += makeCard(u, i); });
+    html += `</div>`;
+  });
+  root.innerHTML = html;
+}
+
+document.getElementById('total-n').textContent = URLS.length;
+document.getElementById('search').addEventListener('input', render);
+render();
+</script>
+</body>
+</html>

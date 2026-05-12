@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Academic Competitions — Reference Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:       #0d0f14;
+  --surface:  #13161e;
+  --border:   #1e2330;
+  --border2:  #2a3045;
+  --text:     #e2e5f0;
+  --muted:    #7a83a0;
+  --accent:   #5b8dee;
+  --radius:   10px;
+  --mono:     'DM Mono', monospace;
+  --sans:     'DM Sans', sans-serif;
+  --serif:    'DM Serif Display', serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ─── HEADER ──────────────────────────────────────────────── */
+header {
+  padding: 56px 40px 40px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(160deg, #0d0f14 0%, #111525 100%);
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 120% at 80% -20%, rgba(91,141,238,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.header-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+h1 em { font-style: italic; color: var(--accent); }
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 300;
+  margin-bottom: 32px;
+}
+.stats-row {
+  display: flex; gap: 28px; flex-wrap: wrap;
+}
+.stat {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.stat-num {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text);
+}
+.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+
+/* ─── CONTROLS ─────────────────────────────────────────────── */
+.controls-wrap {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(13,15,20,.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 40px;
+}
+.controls-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+.search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 380px; }
+.search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+#search {
+  width: 100%; padding: 9px 12px 9px 38px;
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 8px; color: var(--text); font-family: var(--sans); font-size: 13.5px;
+  outline: none; transition: border-color .2s;
+}
+#search:focus { border-color: var(--accent); }
+#search::placeholder { color: var(--muted); }
+
+.seg { display: flex; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; overflow: hidden; }
+.seg button {
+  padding: 8px 16px; background: none; border: none; border-right: 1px solid var(--border2);
+  color: var(--muted); font-family: var(--sans); font-size: 12.5px; cursor: pointer;
+  transition: background .15s, color .15s; white-space: nowrap;
+}
+.seg button:last-child { border-right: none; }
+.seg button.active, .seg button:hover { background: var(--border2); color: var(--text); }
+.seg button.active { color: var(--accent); font-weight: 500; }
+
+#sort-select {
+  padding: 8px 12px; background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 8px; color: var(--text); font-family: var(--sans); font-size: 12.5px;
+  outline: none; cursor: pointer;
+}
+
+.result-count { margin-left: auto; font-size: 12px; color: var(--muted); white-space: nowrap; font-family: var(--mono); }
+
+/* ─── LAYOUT ────────────────────────────────────────────────── */
+.main { max-width: 1100px; margin: 0 auto; padding: 32px 40px 80px; }
+
+/* ─── CATEGORY NAV PILLS ───────────────────────────────────── */
+.cat-nav {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px;
+}
+.cat-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--border2);
+  font-size: 12px; cursor: pointer; transition: all .15s;
+  color: var(--muted); user-select: none;
+}
+.cat-pill:hover { border-color: var(--border2); color: var(--text); transform: translateY(-1px); }
+.cat-pill.active { color: #fff; border-color: transparent; }
+.cat-pill .pill-count {
+  font-family: var(--mono); font-size: 10px;
+  background: rgba(255,255,255,.12); border-radius: 999px;
+  padding: 1px 7px;
+}
+
+/* ─── SECTION HEADERS ──────────────────────────────────────── */
+.section-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 18px 0 14px; margin-top: 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+.section-icon { font-size: 18px; line-height: 1; }
+.section-title { font-family: var(--serif); font-size: 20px; font-weight: 400; }
+.section-count { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: auto; }
+
+/* ─── REF CARDS ─────────────────────────────────────────────── */
+.ref-card {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 0 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  transition: background .12s;
+  border-radius: 0;
+  animation: fadeIn .25s ease both;
+}
+@keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: none; } }
+.ref-card:hover { background: rgba(255,255,255,.018); margin: 0 -12px; padding: 14px 12px; border-radius: 6px; border-color: transparent; }
+.ref-card.hidden { display: none; }
+
+.ref-year {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  padding-top: 2px;
+  text-align: right;
+}
+.ref-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+.ref-title {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.45;
+}
+.ref-title a {
+  color: inherit; text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color .15s, color .15s;
+}
+.ref-title a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+.ref-meta {
+  font-size: 12px; color: var(--muted);
+  display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+}
+.ref-authors { font-style: italic; }
+.ref-venue { max-width: 500px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ref-badge {
+  font-family: var(--mono); font-size: 10px; padding: 2px 8px;
+  border-radius: 4px; background: var(--surface); border: 1px solid var(--border2);
+  color: var(--muted); flex-shrink: 0;
+}
+.ref-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; color: var(--accent); text-decoration: none;
+  padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(91,141,238,.3);
+  transition: background .15s; flex-shrink: 0;
+}
+.ref-link:hover { background: rgba(91,141,238,.1); }
+
+/* ─── EMPTY STATE ───────────────────────────────────────────── */
+#empty {
+  display: none; text-align: center; padding: 80px 20px;
+  color: var(--muted);
+}
+#empty .empty-icon { font-size: 40px; margin-bottom: 16px; }
+#empty p { font-size: 15px; }
+
+/* ─── TIMELINE VIEW ─────────────────────────────────────────── */
+.timeline-year-group { margin-bottom: 4px; }
+.year-marker {
+  display: inline-block;
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  color: var(--accent); background: rgba(91,141,238,.08);
+  border: 1px solid rgba(91,141,238,.2);
+  border-radius: 4px; padding: 2px 10px; margin: 20px 0 4px;
+}
+
+/* ─── SCROLLBAR ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+@media (max-width: 640px) {
+  header, .controls-wrap, .main { padding-left: 20px; padding-right: 20px; }
+  .ref-card { grid-template-columns: 44px 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1>Academic Competitions<br/><em>Reference Library</em></h1>
+    <p class="subtitle">Survey chapter · Escalante &amp; Kruchinina · DMLR 2023 — companion bibliography</p>
+    <div class="stats-row">
+      <div class="stat"><span class="stat-num" id="stat-total">157</span><span class="stat-label">References</span></div>
+      <div class="stat"><span class="stat-num">10</span><span class="stat-label">Topics</span></div>
+      <div class="stat"><span class="stat-num" id="stat-linked">—</span><span class="stat-label">Linked</span></div>
+      <div class="stat"><span class="stat-num">1975–2025</span><span class="stat-label">Span</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="controls-wrap">
+  <div class="controls-inner">
+    <div class="search-wrap">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input id="search" type="text" placeholder="Search title, author, venue…" autocomplete="off"/>
+    </div>
+
+    <div class="seg">
+      <button class="active" data-view="topic" onclick="setView('topic',this)">By Topic</button>
+      <button data-view="timeline" onclick="setView('timeline',this)">Timeline</button>
+    </div>
+
+    <select id="sort-select" onchange="render()">
+      <option value="year-desc">Year ↓</option>
+      <option value="year-asc">Year ↑</option>
+      <option value="alpha">A → Z</option>
+    </select>
+
+    <span class="result-count" id="result-count"></span>
+  </div>
+</div>
+
+<div class="main">
+  <div class="cat-nav" id="cat-nav"></div>
+  <div id="list-root"></div>
+  <div id="empty">
+    <div class="empty-icon">🔍</div>
+    <p>No references match your search.</p>
+  </div>
+</div>
+
+<script>
+const REFS = [
+  {key:'pmlr-v267-patil25a',title:'The Berkeley Function Calling Leaderboard (BFCL): From Tool Use to Agentic Evaluation of Large Language Models',author:'Patil et al.',year:2025,venue:'Proceedings of the 42nd International Conference on Machine Learning',url:'https://proceedings.mlr.press/v267/patil25a.html',cat:'LLM Benchmarks & Evaluation'},
+  {key:'jimenez2024swebench',title:'SWE-bench: Can Language Models Resolve Real-World GitHub Issues?',author:'Jimenez et al.',year:2024,venue:'Proceedings of the International Conference on Learning Representations',url:'https://openreview.net/forum?id=VTF8yNQM66',cat:'LLM Benchmarks & Evaluation'},
+  {key:'chiang2024chatbot',title:'Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference',author:'Chiang et al.',year:2024,venue:'arXiv preprint arXiv:2403.04132',url:'https://arxiv.org/abs/2403.04132',cat:'LLM Benchmarks & Evaluation'},
+  {key:'10.5555/3692070.3692401',title:'Chatbot arena: an open platform for evaluating LLMs by human preference',author:'Chiang et al.',year:2024,venue:'Proceedings of the 41st International Conference on Machine Learning',url:'',cat:'LLM Benchmarks & Evaluation'},
+  {key:'jimenez2024swebenchlanguagemodelsresolve',title:'SWE-bench: Can Language Models Resolve Real-World GitHub Issues?',author:'Jimenez et al.',year:2024,venue:'',url:'https://arxiv.org/abs/2310.06770',cat:'LLM Benchmarks & Evaluation'},
+  {key:'liu2024visualwebbench',title:'VisualWebBench: How Far Have Multimodal LLMs Evolved in Web Page Understanding and Grounding?',author:'Liu et al.',year:2024,venue:'',url:'',cat:'LLM Benchmarks & Evaluation'},
+  {key:'xu2023tool',title:'On the Tool Manipulation Capability of Open-source Large Language Models',author:'Xu et al.',year:2023,venue:'',url:'',cat:'LLM Benchmarks & Evaluation'},
+  {key:'srivastava2022beyond',title:'Beyond the Imitation Game: Quantifying and Extrapolating the Capabilities of Language Models',author:'Srivastava et al.',year:2022,venue:'Transactions on Machine Learning Research',url:'https://openreview.net/forum?id=uyTL5Bvosj',cat:'LLM Benchmarks & Evaluation'},
+  {key:'liang2022holistic',title:'Holistic Evaluation of Language Models',author:'Liang et al.',year:2022,venue:'Transactions on Machine Learning Research',url:'https://openreview.net/forum?id=iO4LZibEqW',cat:'LLM Benchmarks & Evaluation'},
+  {key:'chen2021evaluating',title:'Evaluating Large Language Models Trained on Code',author:'Chen et al.',year:2021,venue:'arXiv preprint arXiv:2107.03374',url:'https://arxiv.org/abs/2107.03374',cat:'LLM Benchmarks & Evaluation'},
+  {key:'austin2021program',title:'Program Synthesis with Large Language Models',author:'Austin et al.',year:2021,venue:'arXiv preprint arXiv:2108.07732',url:'https://arxiv.org/abs/2108.07732',cat:'LLM Benchmarks & Evaluation'},
+  {key:'hendrycks2021math',title:'Measuring Mathematical Problem Solving With the MATH Dataset',author:'Hendrycks et al.',year:2021,venue:'Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks',url:'https://datasets-benchmarks-proceedings.neurips.cc/paper/2021/hash/be83ab3ecd0db773eb2dc1b0a17836a1-Abstract-round2.html',cat:'LLM Benchmarks & Evaluation'},
+  {key:'sakaguchi2021winogrande',title:'WinoGrande: An Adversarial Winograd Schema Challenge at Scale',author:'Sakaguchi et al.',year:2021,venue:'Communications of the ACM',url:'https://doi.org/10.1145/3474381',cat:'LLM Benchmarks & Evaluation'},
+  {key:'DBLP:journals/corr/abs-2107-03374',title:'Evaluating Large Language Models Trained on Code',author:'Chen et al.',year:2021,venue:'CoRR',url:'https://arxiv.org/abs/2107.03374',cat:'LLM Benchmarks & Evaluation'},
+  {key:'DBLP:journals/corr/abs-2108-07732',title:'Program Synthesis with Large Language Models',author:'Austin et al.',year:2021,venue:'CoRR',url:'https://arxiv.org/abs/2108.07732',cat:'LLM Benchmarks & Evaluation'},
+  {key:'wang2019superglue',title:'SuperGLUE: A Stickier Benchmark for General-Purpose Language Understanding Systems',author:'Wang et al.',year:2019,venue:'Advances in Neural Information Processing Systems',url:'https://proceedings.neurips.cc/paper/2019/hash/4496bf24afe7fab6f046bf4923da8de6-Abstract.html',cat:'LLM Benchmarks & Evaluation'},
+  {key:'10.5555/3454287.3454581',title:'SuperGLUE: a stickier benchmark for general-purpose language understanding systems',author:'Wang et al.',year:2019,venue:'Proceedings of the 33rd International Conference on Neural Information Processing Systems',url:'',cat:'LLM Benchmarks & Evaluation'},
+  {key:'wang2018glue',title:'GLUE: A Multi-Task Benchmark and Analysis Platform for Natural Language Understanding',author:'Wang et al.',year:2018,venue:'Proceedings of the EMNLP 2018 Workshop BlackboxNLP: Analyzing and Interpreting Neural Networks for NLP',url:'https://doi.org/10.18653/v1/W18-5446',cat:'LLM Benchmarks & Evaluation'},
+  {key:'wang-etal-2018-glue',title:'GLUE: A Multi-Task Benchmark and Analysis Platform for Natural Language Understanding',author:'Wang et al.',year:2018,venue:'Proceedings of the 2018 EMNLP Workshop BlackboxNLP: Analyzing and Interpreting Neural Networks for NLP',url:'https://aclanthology.org/W18-5446/',cat:'LLM Benchmarks & Evaluation'},
+  {key:'zhou2024webarena',title:'WebArena: A Realistic Web Environment for Building Autonomous Agents',author:'Zhou et al.',year:2024,venue:'Proceedings of the International Conference on Learning Representations',url:'https://openreview.net/forum?id=oKn9c6ytLx',cat:'AI Agents & Agentic AI'},
+  {key:'xie2024osworld',title:'OSWorld: Benchmarking Multimodal Agents for Open-Ended Tasks in Real Computer Environments',author:'Xie et al.',year:2024,venue:'arXiv preprint arXiv:2404.07972',url:'https://arxiv.org/abs/2404.07972',cat:'AI Agents & Agentic AI'},
+  {key:'mialon2024gaia',title:'GAIA: A Benchmark for General AI Assistants',author:'Gr\\\'e',year:2024,venue:'arXiv preprint arXiv:2311.12983',url:'https://arxiv.org/abs/2311.12983',cat:'AI Agents & Agentic AI'},
+  {key:'workarena2024',title:'WorkArena: How Capable Are Web Agents at Solving Common Knowledge Work Tasks?',author:'Drouin et al.',year:2024,venue:'',url:'',cat:'AI Agents & Agentic AI'},
+  {key:'OSWorld',title:'OSWorld: Benchmarking Multimodal Agents for Open-Ended Tasks in Real Computer Environments',author:'Xie et al.',year:2024,venue:'',url:'',cat:'AI Agents & Agentic AI'},
+  {key:'vezhnevets2023concordia',title:'Generative Agent-Based Modeling with Actions Grounded in Physical, Social, or Digital Space Using Concordia',author:'Vezhnevets et al.',year:2023,venue:'arXiv preprint arXiv:2312.03664',url:'https://arxiv.org/abs/2312.03664',cat:'AI Agents & Agentic AI'},
+  {key:'zhou2023webarena',title:'WebArena: A Realistic Web Environment for Building Autonomous Agents',author:'Zhou et al.',year:2023,venue:'arXiv preprint arXiv:2307.13854',url:'',cat:'AI Agents & Agentic AI'},
+  {key:'deng2023mind2web',title:'Mind2Web: Towards a Generalist Agent for the Web',author:'Deng et al.',year:2023,venue:'',url:'',cat:'AI Agents & Agentic AI'},
+  {key:'vezhnevets2023generative',title:'Generative agent-based modeling with actions grounded in physical, social, or digital space using Concordia',author:'Vezhnevets et al.',year:2023,venue:'arXiv preprint arXiv:2312.03664',url:'',cat:'AI Agents & Agentic AI'},
+  {key:'leibo2021meltingpot',title:'Scalable Evaluation of Multi-Agent Reinforcement Learning with Melting Pot',author:'Leibo et al.',year:2021,venue:'Proceedings of the International Conference on Machine Learning',url:'https://proceedings.mlr.press/v139/leibo21a.html',cat:'AI Agents & Agentic AI'},
+  {key:'robocup1',title:'The RoboCup synthetic agent challenge 97',author:'Kitano et al.',year:1998,venue:'RoboCup-97: Robot Soccer World Cup I',url:'',cat:'AI Agents & Agentic AI'},
+  {key:'mazumder2023dataperfbenchmarksdatacentricai',title:'DataPerf: Benchmarks for Data-Centric AI Development',author:'Mazumder et al.',year:2023,venue:'',url:'https://arxiv.org/abs/2207.10062',cat:'Data-Centric AI'},
+  {key:'mazumba2022dataperf',title:'DataPerf: Benchmarks for Data-Centric AI Development',author:'Mazumba et al.',year:2022,venue:'Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks',url:'https://datasets-benchmarks-proceedings.neurips.cc/paper_files/paper/2022',cat:'Data-Centric AI'},
+  {key:'kiela2021dynabench',title:'Dynabench: Rethinking Benchmarking in NLP',author:'Kiela et al.',year:2021,venue:'Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies',url:'https://aclanthology.org/2021.naacl-main.324',cat:'Data-Centric AI'},
+  {key:'https://doi.org/10.48550/arxiv.2208.14686',title:'NeurIPS\'22 Cross-Domain MetaDL competition: Design and baseline results',author:'Carrion-Ojeda et al.',year:2022,venue:'',url:'https://arxiv.org/abs/2208.14686',cat:'AutoML & Meta-Learning'},
+  {key:'pmlr-v133-turner21a',title:'Bayesian Optimization is Superior to Random Search for Machine Learning Hyperparameter Tuning: Analysis of the Black-Box Optimization Challenge 2020',author:'Turner et al.',year:2021,venue:'Proceedings of the NeurIPS 2020 Competition and Demonstration Track',url:'https://proceedings.mlr.press/v133/turner21a.html',cat:'AutoML & Meta-Learning'},
+  {key:'elbaz2021metadl',title:'MetaDL challenge design and baseline results',author:'El Baz et al.',year:2021,venue:'AAAI Workshop on Meta-Learning and MetaDL Challenge',url:'',cat:'AutoML & Meta-Learning'},
+  {key:'baek2020autoclint',title:'AutoCLINT: The Winning Method in AutoCV Challenge 2019',author:'Baek et al.',year:2020,venue:'arXiv',url:'',cat:'AutoML & Meta-Learning'},
+  {key:'DBLP:books/sp/19/GuyonSBEELJRSSSTV19',title:'Analysis of the AutoML Challenge Series 2015-2018',author:'Guyon et al.',year:2019,venue:'Automated Machine Learning - Methods, Systems, Challenges',url:'https://doi.org/10.1007/978-3-030-05318-5\\_10',cat:'AutoML & Meta-Learning'},
+  {key:'Feurer2019',title:'Auto-sklearn: Efficient and Robust Automated Machine Learning',author:'Feurer et al.',year:2019,venue:'Automated Machine Learning: Methods, Systems, Challenges',url:'https://doi.org/10.1007/978-3-030-05318-5_6',cat:'AutoML & Meta-Learning'},
+  {key:'guyon2018',title:'Analysis of the AutoML challenge series 2015-2018',author:'Guyon et al.',year:2018,venue:'AutoML, Springer Series on Challenges in Machine Learning (to appear)',url:'',cat:'AutoML & Meta-Learning'},
+  {key:'autosklearnautoml2',title:'Practical Automated Machine Learning for the AutoML Challenge',author:'Feurer et al.',year:2018,venue:'AutoML workshop at ICML',url:'',cat:'AutoML & Meta-Learning'},
+  {key:'automlbook',title:'AutoML: Methods, Systems, Challenges',author:'Hutter et al.',year:2018,venue:'',url:'',cat:'AutoML & Meta-Learning'},
+  {key:'DBLP:series/synthesis/2016Chen',title:'Lifelong Machine Learning',author:'Chen et al.',year:2016,venue:'',url:'https://doi.org/10.2200/S00737ED1V01Y201610AIM033',cat:'AutoML & Meta-Learning'},
+  {key:'autosklearn',title:'Efficient and Robust Automated Machine Learning',author:'Feurer et al.',year:2015,venue:'Advances in Neural Information Processing Systems 28',url:'http://papers.nips.cc/paper/5872-efficient-and-robust-automated-machine-learning.pdf',cat:'AutoML & Meta-Learning'},
+  {key:'danny13',title:'Lifelong Machine Learning Systems: Beyond Learning Algorithms',author:'Silver et al.',year:2013,venue:'Lifelong Machine Learning: Papers from the 2013 AAAI Spring Symposium',url:'',cat:'AutoML & Meta-Learning'},
+  {key:'DBLP:journals/nn/GuyonSDC08',title:'Analysis of the IJCNN 2007 agnostic learning vs. prior knowledge challenge',author:'Guyon et al.',year:2008,venue:'Neural Networks',url:'https://doi.org/10.1016/j.neunet.2007.12.024',cat:'AutoML & Meta-Learning'},
+  {key:'DBLP:conf/ijcnn/GuyonSDC07',title:'Agnostic Learning vs. Prior Knowledge Challenge',author:'Guyon et al.',year:2007,venue:'Proceedings of the International Joint Conference on Neural Networks, IJCNN 2007, Celebrating 20 years of neural networks, Orlando, Florida, USA, August 12-17, 2007',url:'https://doi.org/10.1109/IJCNN.2007.4371065',cat:'AutoML & Meta-Learning'},
+  {key:'DBLP:conf/ijcnn/GuyonADB06',title:'PerformancePrediction Challenge',author:'Guyon et al.',year:2006,venue:'Proceedings of the International Joint Conference on Neural Networks, IJCNN 2006, part of the IEEE World Congress on Computational Intelligence, WCCI 2006, Vancouver, BC, Canada, 16-21 July 2006',url:'https://doi.org/10.1109/IJCNN.2006.246632',cat:'AutoML & Meta-Learning'},
+  {key:'NIPS2004_5e751896',title:'Result Analysis of the NIPS 2003 Feature Selection Challenge',author:'Guyon et al.',year:2004,venue:'Advances in Neural Information Processing Systems',url:'https://proceedings.neurips.cc/paper/2004/file/5e751896e527c862bf67251a474b3819-Paper.pdf',cat:'AutoML & Meta-Learning'},
+  {key:'algosel',title:'The Algorithm Selection Problem',author:'Rice',year:1975,venue:'Computer Science Technical Reports. Purdue University. Paper 99',url:'',cat:'AutoML & Meta-Learning'},
+  {key:'guyon-2011',title:'2012 Special Issue: Analysis of the IJCNN 2011 UTL challenge',author:'Guyon et al.',year:0,venue:'',url:'http://www.causality.inf.ethz.ch/unsupervised-learning.php',cat:'AutoML & Meta-Learning'},
+  {key:'ntire22',title:'NTIRE 2022 Challenge on Perceptual Image Quality Assessment',author:'Gu et al.',year:2022,venue:'',url:'https://arxiv.org/abs/2206.11695',cat:'Computer Vision'},
+  {key:'DBLP:journals/taffco/EscalanteKSEGGB22',title:'Modeling, Recognizing, and Explaining Apparent Personality From Videos',author:'Escalante et al.',year:2022,venue:'IEEE Trans. Affect. Comput.',url:'https://doi.org/10.1109/TAFFC.2020.2973984',cat:'Computer Vision'},
+  {key:'9353210',title:'RODNet: A Real-Time Radar Object Detection Network Cross-Supervised by Camera-Radar Fused Object 3D Localization',author:'Wang et al.',year:2021,venue:'IEEE Journal of Selected Topics in Signal Processing',url:'https://doi.org/10.1109/JSTSP.2021.3058895',cat:'Computer Vision'},
+  {key:'wang2021rod2021',title:'ROD2021 Challenge: A Summary for Radar Object Detection Challenge for Autonomous Driving Applications',author:'Wang et al.',year:2021,venue:'Proceedings of the 2021 International Conference on Multimedia Retrieval',url:'',cat:'Computer Vision'},
+  {key:'DANet',title:'DANet: Dimension Apart Network for Radar Object Detection',author:'Ju et al.',year:2021,venue:'Proceedings of the 2021 International Conference on Multimedia Retrieval',url:'https://doi.org/10.1145/3460426.3463656',cat:'Computer Vision'},
+  {key:'Fisheye_AD',title:'Woodscape Fisheye Semantic Segmentation for Autonomous Driving - CVPR 2021 OmniCV Workshop Challenge',author:'Ramachandran et al.',year:2021,venue:'CoRR',url:'https://arxiv.org/abs/2107.08246',cat:'Computer Vision'},
+  {key:'RosettaFold',title:'Accurate prediction of protein structures and interactions using a 3-track network',author:'Baek et al.',year:2021,venue:'',url:'https://doi.org/10.1101/2021.06.14.448402',cat:'Computer Vision'},
+  {key:'repss2',title:'The 2nd Challenge on Remote Physiological Signal Sensing (RePSS)',author:'Li et al.',year:2021,venue:'2021 IEEE/CVF International Conference on Computer Vision Workshops (ICCVW)',url:'https://doi.org/10.1109/ICCVW54120.2021.00273',cat:'Computer Vision'},
+  {key:'ChaLearnAutoDL2019',title:'Winning Solutions and Post-Challenge Analyses of the ChaLearn AutoDL Challenge 2019',author:'Liu et al.',year:2021,venue:'IEEE Transactions on Pattern Analysis and Machine Intelligence',url:'https://doi.org/10.1109/TPAMI.2021.3075372',cat:'Computer Vision'},
+  {key:'DBLP:journals/iet-bmt/LiuL0LEEM0WYTYY21',title:'Cross-ethnicity face anti-spoofing recognition challenge: A review',author:'Liu et al.',year:2021,venue:'IET Biom.',url:'https://doi.org/10.1049/bme2.12002',cat:'Computer Vision'},
+  {key:'DBLP:conf/iccv/PalmeroBJCNCSSZ21',title:'ChaLearn LAP Challenges on Self-Reported Personality Recognition and Non-Verbal Behavior Forecasting During Social Dyadic Interactions: Dataset, Design, and Results',author:'Palmero et al.',year:2021,venue:'ChaLearn LAP Challenge on Understanding Social Behavior in Dyadic and Small Group Interactions, DYAD 2021, held in conjunction with ICCV 2021, Virtual, October 16, 2021',url:'https://proceedings.mlr.press/v173/palmero22b.html',cat:'Computer Vision'},
+  {key:'DBLP:conf/cvpr/SincanJEK21',title:'ChaLearn LAP Large Scale Signer Independent Isolated Sign Language Recognition Challenge: Design, Results and Future Research',author:'Sincan et al.',year:2021,venue:'IEEE Conference on Computer Vision and Pattern Recognition Workshops, CVPR Workshops 2021, virtual, June 19-25, 2021',url:'https://openaccess.thecvf.com/content/CVPR2021W/ChaLearn/html/Sincan\\_ChaLearn\\_LAP\\_Large\\_Scale\\_Signer\\_Independent\\_Isolated\\_Sign\\_Language\\_Recognition\\_CVPRW\\_2021\\_paper.html',cat:'Computer Vision'},
+  {key:'DBLP:journals/corr/abs-2107-06912',title:'From Show to Tell: A Survey on Image Captioning',author:'Stefanini et al.',year:2021,venue:'CoRR',url:'https://arxiv.org/abs/2107.06912',cat:'Computer Vision'},
+  {key:'elbaz:hal-03688638',title:'Lessons learned from the NeurIPS 2021 MetaDL challenge: Backbone fine-tuning without episodic meta-learning dominates for few-shot learning image classification',author:'El Baz et al.',year:2021,venue:'NeurIPS 2021 Competition and Demonstration Track',url:'https://hal.archives-ouvertes.fr/hal-03688638',cat:'Computer Vision'},
+  {key:'DBLP:series/synthesis/2020Wan',title:'Multi-Modal Face Presentation Attack Detection',author:'Wan et al.',year:2020,venue:'',url:'https://doi.org/10.2200/S01032ED1V01Y202007COV017',cat:'Computer Vision'},
+  {key:'DBLP:conf/fgr/ClapesJME20',title:'ChaLearn LAP 2020 Challenge on Identity-preserved Human Detection: Dataset and Results',author:'Clap\\\'e',year:2020,venue:'15th IEEE International Conference on Automatic Face and Gesture Recognition, FG 2020, Buenos Aires, Argentina, November 16-20, 2020',url:'https://doi.org/10.1109/FG47880.2020.00135',cat:'Computer Vision'},
+  {key:'DBLP:conf/cvpr/Liu0EETYWLGGL19',title:'Multi-Modal Face Anti-Spoofing Attack Detection Challenge at CVPR2019',author:'Liu et al.',year:2019,venue:'IEEE Conference on Computer Vision and Pattern Recognition Workshops, CVPR Workshops 2019, Long Beach, CA, USA, June 16-20, 2019',url:'http://openaccess.thecvf.com/content\\_CVPRW\\_2019/html/CFS/Liu\\_Multi-Modal\\_Face\\_Anti-Spoofing\\_Attack\\_Detection\\_Challenge\\_at\\_CVPR2019\\_CVPRW\\_2019\\_paper.html',cat:'Computer Vision'},
+  {key:'DBLP:journals/ijon/BaiA18',title:'A survey on automatic image caption generation',author:'Bai et al.',year:2018,venue:'Neurocomputing',url:'https://doi.org/10.1016/j.neucom.2018.05.080',cat:'Computer Vision'},
+  {key:'DBLP:journals/corr/abs-1804-02767',title:'YOLOv3: An Incremental Improvement',author:'Redmon et al.',year:2018,venue:'CoRR',url:'http://arxiv.org/abs/1804.02767',cat:'Computer Vision'},
+  {key:'DBLP:conf/ijcnn/EscaleraBEG17',title:'ChaLearn looking at people: A review of events and resources',author:'Escalera et al.',year:2017,venue:'2017 International Joint Conference on Neural Networks, IJCNN 2017, Anchorage, AK, USA, May 14-19, 2017',url:'https://doi.org/10.1109/IJCNN.2017.7966041',cat:'Computer Vision'},
+  {key:'DBLP:books/sp/EGA2017',title:'Gesture Recognition',author:'Unknown',year:2017,venue:'',url:'https://doi.org/10.1007/978-3-319-57021-1',cat:'Computer Vision'},
+  {key:'DBLP:conf/iccvw/WanEAEBGMAGLX17',title:'Results and Analysis of ChaLearn LAP Multi-modal Isolated and Continuous Gesture Recognition, and Real Versus Fake Expressed Emotions Challenges',author:'Wan et al.',year:2017,venue:'2017 IEEE International Conference on Computer Vision Workshops, ICCV Workshops 2017, Venice, Italy, October 22-29, 2017',url:'https://doi.org/10.1109/ICCVW.2017.377',cat:'Computer Vision'},
+  {key:'DBLP:conf/cvpr/TimofteAG0ZLSKN17',title:'NTIRE 2017 Challenge on Single Image Super-Resolution: Methods and Results',author:'Timofte et al.',year:2017,venue:'2017 IEEE Conference on Computer Vision and Pattern Recognition Workshops, CVPR Workshops 2017, Honolulu, HI, USA, July 21-26, 2017',url:'https://doi.org/10.1109/CVPRW.2017.149',cat:'Computer Vision'},
+  {key:'DBLP:conf/ijcnn/EscalanteGEJMBA17',title:'Design of an explainable machine learning challenge for video interviews',author:'Escalante et al.',year:2017,venue:'2017 International Joint Conference on Neural Networks, IJCNN 2017, Anchorage, AK, USA, May 14-19, 2017',url:'https://doi.org/10.1109/IJCNN.2017.7966320',cat:'Computer Vision'},
+  {key:'DBLP:conf/icml/GuyonCEEJLMRRSS16',title:'A brief Review of the ChaLearn AutoML Challenge: Any-time Any-dataset Learning without Human Intervention',author:'Guyon et al.',year:2016,venue:'Proceedings of the Workshop on Automatic Machine Learning',url:'https://proceedings.mlr.press/v64/guyon_review_2016.html',cat:'Computer Vision'},
+  {key:'DBLP:conf/cvpr/RedmonDGF16',title:'You Only Look Once: Unified, Real-Time Object Detection',author:'Redmon et al.',year:2016,venue:'2016 IEEE Conference on Computer Vision and Pattern Recognition, CVPR 2016, Las Vegas, NV, USA, June 27-30, 2016',url:'https://doi.org/10.1109/CVPR.2016.91',cat:'Computer Vision'},
+  {key:'DBLP:conf/cvpr/EscaleraTMBEGTC16',title:'ChaLearn Looking at People and Faces of the World: Face AnalysisWorkshop and Challenge 2016',author:'Escalera et al.',year:2016,venue:'2016 IEEE Conference on Computer Vision and Pattern Recognition Workshops, CVPR Workshops 2016, Las Vegas, NV, USA, June 26 - July 1, 2016',url:'https://doi.org/10.1109/CVPRW.2016.93',cat:'Computer Vision'},
+  {key:'DBLP:conf/ijcnn/2015',title:'Design of the 2015 ChaLearn AutoML challenge',author:'Guyon et al.',year:2015,venue:'2015 International Joint Conference on Neural Networks, IJCNN 2015, Killarney, Ireland, July 12-17, 2015',url:'https://doi.org/10.1109/IJCNN.2015.7280767',cat:'Computer Vision'},
+  {key:'Everingham15',title:'The Pascal Visual Object Classes Challenge: A Retrospective',author:'Everingham et al.',year:2015,venue:'International Journal of Computer Vision',url:'',cat:'Computer Vision'},
+  {key:'Russakovsky2015',title:'ImageNet Large Scale Visual Recognition Challenge',author:'Russakovsky et al.',year:2015,venue:'International Journal of Computer Vision',url:'https://doi.org/10.1007/s11263-015-0816-y',cat:'Computer Vision'},
+  {key:'DBLP:conf/cvpr/SzegedyLJSRAEVR15',title:'Going deeper with convolutions',author:'Szegedy et al.',year:2015,venue:'IEEE Conference on Computer Vision and Pattern Recognition, CVPR 2015, Boston, MA, USA, June 7-12, 2015',url:'https://doi.org/10.1109/CVPR.2015.7298594',cat:'Computer Vision'},
+  {key:'DBLP:conf/iccvw/EscaleraFPBGEMS15',title:'ChaLearn Looking at People 2015: Apparent Age and Cultural Event Recognition Datasets and Results',author:'Escalera et al.',year:2015,venue:'2015 IEEE International Conference on Computer Vision Workshop, ICCV Workshops 2015, Santiago, Chile, December 7-13, 2015',url:'https://doi.org/10.1109/ICCVW.2015.40',cat:'Computer Vision'},
+  {key:'DBLP:conf/cvpr/BaroGFBOEGE15',title:'ChaLearn Looking at People 2015 challenges: Action spotting and cultural event recognition',author:'Bar\\\'o',year:2015,venue:'2015 IEEE Conference on Computer Vision and Pattern Recognition Workshops, CVPR Workshops 2015, Boston, MA, USA, June 7-12, 2015',url:'https://doi.org/10.1109/CVPRW.2015.7301329',cat:'Computer Vision'},
+  {key:'DBLP:journals/corr/SimonyanZ14a',title:'Very Deep Convolutional Networks for Large-Scale Image Recognition',author:'Simonyan et al.',year:2015,venue:'3rd International Conference on Learning Representations, ICLR 2015, San Diego, CA, USA, May 7-9, 2015, Conference Track Proceedings',url:'http://arxiv.org/abs/1409.1556',cat:'Computer Vision'},
+  {key:'DBLP:journals/corr/HeZRS15',title:'Deep Residual Learning for Image Recognition',author:'He et al.',year:2015,venue:'CoRR',url:'http://arxiv.org/abs/1512.03385',cat:'Computer Vision'},
+  {key:'DBLP:conf/eccv/EscaleraBGBMRPE14',title:'ChaLearn Looking at People Challenge 2014: Dataset and Results',author:'Escalera et al.',year:2014,venue:'Computer Vision - ECCV 2014 Workshops - Zurich, Switzerland, September 6-7 and 12, 2014, Proceedings, Part I',url:'https://doi.org/10.1007/978-3-319-16178-5\\_32',cat:'Computer Vision'},
+  {key:'DBLP:conf/eccv/LinMBHPRDZ14',title:'Microsoft COCO: Common Objects in Context',author:'Lin et al.',year:2014,venue:'Computer Vision - ECCV 2014 - 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part V',url:'https://doi.org/10.1007/978-3-319-10602-1\\_48',cat:'Computer Vision'},
+  {key:'DBLP:journals/corr/KarpathyF14',title:'Deep Visual-Semantic Alignments for Generating Image Descriptions',author:'Karpathy et al.',year:2014,venue:'CoRR',url:'http://arxiv.org/abs/1412.2306',cat:'Computer Vision'},
+  {key:'DBLP:conf/icmi/EscaleraGBRLGAE13',title:'Multi-modal gesture recognition challenge 2013: dataset and results',author:'Escalera et al.',year:2013,venue:'2013 International Conference on Multimodal Interaction, ICMI \'13, Sydney, NSW, Australia, December 9-13, 2013',url:'https://doi.org/10.1145/2522848.2532595',cat:'Computer Vision'},
+  {key:'DBLP:conf/nips/KrizhevskySH12',title:'ImageNet Classification with Deep Convolutional Neural Networks',author:'Krizhevsky et al.',year:2012,venue:'Advances in Neural Information Processing Systems 25: 26th Annual Conference on Neural Information Processing Systems 2012. Proceedings of a meeting held December 3-6, 2012, Lake Tahoe, Nevada, United States',url:'https://proceedings.neurips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html',cat:'Computer Vision'},
+  {key:'DBLP:books/daglib/p/CloughMS10',title:'Seven Years of Image Retrieval Evaluation',author:'Clough et al.',year:2010,venue:'ImageCLEF, Experimental Evaluation in Visual Information Retrieval',url:'https://doi.org/10.1007/978-3-642-15181-1\\_1',cat:'Computer Vision'},
+  {key:'DBLP:journals/cviu/EscalanteHGLMMSPG10',title:'The segmented and annotated IAPR TC-12 benchmark',author:'Escalante et al.',year:2010,venue:'Comput. Vis. Image Underst.',url:'https://doi.org/10.1016/j.cviu.2009.03.008',cat:'Computer Vision'},
+  {key:'candela-2005',title:'Pascale 2 challenge: Learning when test and training inputs have different distributions challenge',author:'Candela et al.',year:2005,venue:'',url:'',cat:'Computer Vision'},
+  {key:'hirschman1998evaluating',title:'Evaluating spoken language interaction: Experiences from the darpa spoken language program 1988--1995',author:'Hirschman',year:1998,venue:'Spoken Language Discourse (Cambridge, MA: MIT Press;).[Google Scholar]',url:'',cat:'Computer Vision'},
+  {key:'chalearn',title:'The Challenges in Machine Learning organization',author:'ChaLearn',year:0,venue:'',url:'',cat:'Computer Vision'},
+  {key:'hendrycks2021measuring',title:'Measuring Massive Multitask Language Understanding',author:'Hendrycks et al.',year:2021,venue:'Proceedings of the International Conference on Learning Representations',url:'https://openreview.net/forum?id=d7KBjmI3GmQ',cat:'NLP & Information Retrieval'},
+  {key:'DBLP:journals/corr/abs-2104-13473',title:'TRECVID 2020: A comprehensive campaign for evaluating video retrieval tasks across multiple application domains',author:'Awad et al.',year:2021,venue:'CoRR',url:'https://arxiv.org/abs/2104.13473',cat:'NLP & Information Retrieval'},
+  {key:'DBLP:journals/corr/abs-2009-11352',title:'ConvAI3: Generating Clarifying Questions for Open-Domain Dialogue Systems (ClariQ)',author:'Aliannejadi et al.',year:2020,venue:'CoRR',url:'https://arxiv.org/abs/2009.11352',cat:'NLP & Information Retrieval'},
+  {key:'qmnist-2019',title:'Cold Case: The Lost MNIST Digits',author:'Yadav et al.',year:2019,venue:'Advances in Neural Information Processing Systems 32',url:'',cat:'NLP & Information Retrieval'},
+  {key:'DBLP:journals/corr/abs-1803-08652',title:'Studio Ousia\'s Quiz Bowl Question Answering System',author:'Yamada et al.',year:2018,venue:'CoRR',url:'http://arxiv.org/abs/1803.08652',cat:'NLP & Information Retrieval'},
+  {key:'OVER2001369',title:'Economic Impact Assessment of NIST’s Text REtrieval Conference (TREC) Program',author:'Rowe et al.',year:2010,venue:'',url:'',cat:'NLP & Information Retrieval'},
+  {key:'Pan-2010',title:'A Survey on Transfer Learning',author:'Pan et al.',year:2010,venue:'IEEE Trans. on Knowl. and Data Eng.',url:'http://dx.doi.org/10.1109/TKDE.2009.191',cat:'NLP & Information Retrieval'},
+  {key:'black-eskenazi-2009-spoken',title:'The Spoken Dialogue Challenge',author:'Black et al.',year:2009,venue:'Proceedings of the SIGDIAL 2009 Conference',url:'https://aclanthology.org/W09-3950',cat:'NLP & Information Retrieval'},
+  {key:'DBLP:journals/ipm/Muresan07',title:'TREC - Experiment and Evaluation in Information Retrieval',author:'Unknown',year:2005,venue:'',url:'',cat:'NLP & Information Retrieval'},
+  {key:'10.1007/3-540-44645-1_9',title:'CLEF 2000 --- Overview of Results',author:'Braschler',year:2001,venue:'Cross-Language Information Retrieval and Evaluation',url:'',cat:'NLP & Information Retrieval'},
+  {key:'DBLP:journals/nle/Voorhees01',title:'The TREC question answering track',author:'Voorhees',year:2001,venue:'Nat. Lang. Eng.',url:'https://doi.org/10.1017/S1351324901002789',cat:'NLP & Information Retrieval'},
+  {key:'10.5555/2835865.2835867',title:'The TREC Spoken Document Retrieval Track: A Success Story',author:'Garofolo et al.',year:2000,venue:'Content-Based Multimedia Information Access - Volume 1',url:'',cat:'NLP & Information Retrieval'},
+  {key:'harman:trec',title:'The Text REtrieval Conferences (TRECs) and the Cross-Language Track',author:'Harman',year:1998,venue:'First International Conference on Language Resources \\& Evaluation, Granada, Spain',url:'',cat:'NLP & Information Retrieval'},
+  {key:'DBLP:conf/tipster/VoorheesH98',title:'The Text Retrieval Conferences (TRECS)',author:'Voorhees et al.',year:1998,venue:'TIPSTER TEXT PROGRAM PHASE III: Proceedings of a Workshop held at Baltimore, MD, USA, October 13-15, 1998',url:'https://aclanthology.org/X98-1031/',cat:'NLP & Information Retrieval'},
+  {key:'mnistreport97',title:'NIST Form-Based Handprint Recognition System',author:'Garris et al.',year:1997,venue:'',url:'https://doi.org/https://doi.org/10.6028/NIST.IR.5959',cat:'NLP & Information Retrieval'},
+  {key:'DBLP:conf/trec/Harman95',title:'Overview of the Fourth Text REtrieval Conference (TREC-4)',author:'Harman',year:1995,venue:'Proceedings of The Fourth Text REtrieval Conference, TREC 1995, Gaithersburg, Maryland, USA, November 1-3, 1995',url:'http://trec.nist.gov/pubs/trec4/overview.ps.gz',cat:'NLP & Information Retrieval'},
+  {key:'Grother1995NISTSD',title:'NIST Special Database 19 Handprinted Forms and Characters Database',author:'Grother',year:1995,venue:'',url:'',cat:'NLP & Information Retrieval'},
+  {key:'trec93',title:'Overview of the First TREC Conference',author:'Harman',year:1993,venue:'Proceedings of the 16th Annual International ACM SIGIR Conference on Research and Development in Information Retrieval',url:'https://doi.org/10.1145/160688.160692',cat:'NLP & Information Retrieval'},
+  {key:'DBLP:conf/icdar/MatsuiNYWY93',title:'State of the art of handwritten numeral recognition in Japan-The results of the first IPTP character recognition competition',author:'Matsui et al.',year:1993,venue:'2nd International Conference Document Analysis and Recognition, ICDAR \'93, October 20-22, 1993, Tsukuba City, Japan',url:'https://doi.org/10.1109/ICDAR.1993.395709',cat:'NLP & Information Retrieval'},
+  {key:'marcus-1992-overview',title:'Overview of the Fifth DARPA Speech and Natural Language Workshop',author:'Marcus',year:1992,venue:'Speech and Natural Language: Proceedings of a Workshop Held at Harriman, New York, February 23-26, 1992',url:'https://aclanthology.org/H92-1001',cat:'NLP & Information Retrieval'},
+  {key:'wayne-1991-snapshot',title:'A Snapshot of Two DARPA Speech and Natural Language Programs',author:'Wayne',year:1991,venue:'Speech and Natural Language: Proceedings of a Workshop Held at Pacific Grove, California, February 19-22, 1991',url:'https://aclanthology.org/H91-1078',cat:'NLP & Information Retrieval'},
+  {key:'pmlr-v176-eichenberger22a',title:'Traffic4cast at NeurIPS 2021 - Temporal and Spatial Few-Shot Transfer Learning in Gridded Geo-Spatial Processes',author:'Eichenberger et al.',year:2022,venue:'Proceedings of the NeurIPS 2021 Competitions and Demonstrations Track',url:'https://proceedings.mlr.press/v176/eichenberger22a.html',cat:'Robotics, RL & Autonomous Systems'},
+  {key:'pmlr-v133-kopp21a',title:'Traffic4cast at NeurIPS 2020 - yet more on the unreasonable effectiveness of gridded geo-spatial processes',author:'Kopp et al.',year:2021,venue:'Proceedings of the NeurIPS 2020 Competition and Demonstration Track',url:'https://proceedings.mlr.press/v133/kopp21a.html',cat:'Robotics, RL & Autonomous Systems'},
+  {key:'pmlr-v133-guss21a',title:'Towards robust and domain agnostic reinforcement learning competitions: MineRL 2020',author:'Guss et al.',year:2021,venue:'Proceedings of the NeurIPS 2020 Competition and Demonstration Track',url:'https://proceedings.mlr.press/v133/guss21a.html',cat:'Robotics, RL & Autonomous Systems'},
+  {key:'pmlr-v123-kreil20a',title:'The surprising efficiency of framing geo-spatial time series forecasting as a video prediction task – Insights from the IARAI \\t4c Competition at NeurIPS 2019',author:'Kreil et al.',year:2020,venue:'Proceedings of the NeurIPS 2019 Competition and Demonstration Track',url:'https://proceedings.mlr.press/v123/kreil20a.html',cat:'Robotics, RL & Autonomous Systems'},
+  {key:'pmlr-v123-milani20a',title:'Retrospective Analysis of the 2019 MineRL Competition on Sample Efficient Reinforcement Learning',author:'Milani et al.',year:2020,venue:'Proceedings of the NeurIPS 2019 Competition and Demonstration Track',url:'https://proceedings.mlr.press/v123/milani20a.html',cat:'Robotics, RL & Autonomous Systems'},
+  {key:'pmlr-v123-gardner20a',title:'The First International Competition in Machine Reconnaissance Blind Chess',author:'Gardner et al.',year:2020,venue:'Proceedings of the NeurIPS 2019 Competition and Demonstration Track',url:'https://proceedings.mlr.press/v123/gardner20a.html',cat:'Robotics, RL & Autonomous Systems'},
+  {key:'DBLP:journals/corr/abs-1804-00361',title:'Learning to Run challenge solutions: Adapting reinforcement learning methods for neuromusculoskeletal environments',author:'Kidzinski et al.',year:2018,venue:'CoRR',url:'http://arxiv.org/abs/1804.00361',cat:'Robotics, RL & Autonomous Systems'},
+  {key:'Dosovitskiy17',title:'CARLA: An Open Urban Driving Simulator',author:'Dosovitskiy et al.',year:2017,venue:'Proceedings of the 1st Annual Conference on Robot Learning',url:'',cat:'Robotics, RL & Autonomous Systems'},
+  {key:'DBLP:journals/ki/Visser16a',title:'20 Years of RoboCup',author:'Visser',year:2016,venue:'K\\"u',url:'https://doi.org/10.1007/s13218-016-0439-7',cat:'Robotics, RL & Autonomous Systems'},
+  {key:'DarpaTartanTeam',title:'Tartan Racing: A Multi-Modal Approach to the DARPA Urban Challenge',author:'Urmson et al.',year:2007,venue:'',url:'',cat:'Robotics, RL & Autonomous Systems'},
+  {key:'10.1007/978-3-030-98253-9_1',title:'Overview of the HECKTOR Challenge at MICCAI 2021: Automatic Head and Neck Tumor Segmentation and Outcome Prediction in PET/CT Images',author:'Andrearczyk et al.',year:2022,venue:'Head and Neck Tumor Segmentation and Outcome Prediction',url:'',cat:'Biology & Medical Imaging'},
+  {key:'FastFold',title:'FastFold: Reducing AlphaFold Training Time from 11 Days to 67 Hours',author:'Cheng et al.',year:2022,venue:'',url:'https://arxiv.org/abs/2203.00854',cat:'Biology & Medical Imaging'},
+  {key:'10.1001/jamanetworkopen.2022.27423',title:'A Crowdsourcing Approach to Develop Machine Learning Models to Quantify Radiographic Joint Damage in Rheumatoid Arthritis',author:'Sun et al.',year:2022,venue:'JAMA Network Open',url:'https://doi.org/10.1001/jamanetworkopen.2022.27423',cat:'Biology & Medical Imaging'},
+  {key:'MEYER2021636',title:'Advances in systems biology modeling: 10 years of crowdsourcing DREAM challenges',author:'Meyer et al.',year:2021,venue:'Cell Systems',url:'https://www.sciencedirect.com/science/article/pii/S2405471221002015',cat:'Biology & Medical Imaging'},
+  {key:'CASP21',title:'Critical assessment of methods of protein structure prediction (CASP)—Round XIV',author:'Kryshtafovych et al.',year:2021,venue:'Proteins',url:'',cat:'Biology & Medical Imaging'},
+  {key:'Jumper2021HighlyAP',title:'Highly accurate protein structure prediction with AlphaFold',author:'Jumper et al.',year:2021,venue:'Nature',url:'',cat:'Biology & Medical Imaging'},
+  {key:'DistortionLaparoscopicVideos',title:'Transfer Learning and Decision Fusion for Real Time Distortion Classification in Laparoscopic Videos',author:'Aldahoul et al.',year:2021,venue:'IEEE Access',url:'https://doi.org/10.1109/ACCESS.2021.3105454',cat:'Biology & Medical Imaging'},
+  {key:'repss1',title:'The 1st Challenge on Remote Physiological Signal Sensing (RePSS)',author:'Li et al.',year:2020,venue:'',url:'https://arxiv.org/abs/2003.11756',cat:'Biology & Medical Imaging'},
+  {key:'casp13',title:'De novo structure prediction with deep-learning based scoring',author:'Evans et al.',year:2018,venue:'',url:'',cat:'Biology & Medical Imaging'},
+  {key:'CASP04',title:'Critical assessment of methods of protein structure prediction (CASP) round X',author:'J et al.',year:2014,venue:'Proteins',url:'',cat:'Biology & Medical Imaging'},
+  {key:'DBLP:conf/icdar/LucasPSTWY03',title:'ICDAR 2003 Robust Reading Competitions',author:'Lucas et al.',year:2003,venue:'7th International Conference on Document Analysis and Recognition (ICDAR 2003), 2-Volume Set, 3-6 August 2003, Edinburgh, Scotland, UK',url:'https://doi.org/10.1109/ICDAR.2003.1227749',cat:'Biology & Medical Imaging'},
+  {key:'Marak_Cousty_Najman_Talbot2009',title:'4D Morphological segmentation and the MICCAI LV-segmentation grand challenge',author:'Marak et al.',year:0,venue:'',url:'https://doi.org/10.54294/2wgozl',cat:'Biology & Medical Imaging'},
+  {key:'scully',title:'3D Segmentation In The Clinic: A Grand Challenge II at MICCAI 2008 - MS Lesion Segmentation',author:'Scully et al.',year:0,venue:'',url:'https://doi.org/10.54294/0ypjxr',cat:'Biology & Medical Imaging'},
+  {key:'carlens2023state',title:'State of Competitive Machine Learning in 2022',author:'Carlens',year:2023,venue:'ML Contests Research',url:'',cat:'Competition Platforms & Methodology'},
+  {key:'codalab_competitions_JMLR',title:'CodaLab Competitions: An Open Source Platform to Organize Scientific Challenges',author:'Pavao et al.',year:2023,venue:'Journal of Machine Learning Research',url:'http://jmlr.org/papers/v24/21-1436.html',cat:'Competition Platforms & Methodology'},
+  {key:'codalab_competitions',title:'CodaLab Competitions: An open source platform to organize scientific challenges',author:'Pavao et al.',year:2022,venue:'Technical report',url:'https://hal.inria.fr/hal-03629462v1',cat:'Competition Platforms & Methodology'},
+  {key:'pmlr-v176-kiela22a',title:'NeurIPS 2021 Competition and Demonstration Track Revised Selected Papers',author:'Kiela et al.',year:2022,venue:'Proceedings of the NeurIPS 2021 Competitions and Demonstrations Track',url:'https://proceedings.mlr.press/v176/kiela22a.html',cat:'Competition Platforms & Methodology'},
+  {key:'pmlr-v220-ciccone23a',title:'NeurIPS 2022 Competition Track Revised Selected Papers',author:'Ciccone et al.',year:2022,venue:'Proceedings of the NeurIPS 2022 Competitions Track',url:'https://proceedings.mlr.press/v220/ciccone23a.html',cat:'Competition Platforms & Methodology'},
+  {key:'DBLP:conf/nips/EscalanteH20',title:'NeurIPS 2020 Competition and Demonstration Track: Revised selected papers',author:'Escalante et al.',year:2020,venue:'NeurIPS 2020 Competition and Demonstration Track, 6-12 December 2020, Virtual Event / Vancouver, BC, Canada',url:'http://proceedings.mlr.press/v133/escalante21a.html',cat:'Competition Platforms & Methodology'},
+  {key:'DBLP:conf/nips/EscalanteH19',title:'NeurIPS 2019 Competition and Demonstration Track Revised selected papers',author:'Escalante et al.',year:2019,venue:'NeurIPS 2019 Competition and Demonstration Track, 8-14 December 2019, Vancouver, Canada. Revised selected papers',url:'http://proceedings.mlr.press/v123/escalante20a.html',cat:'Competition Platforms & Methodology'},
+  {key:'10.1093/carcin/bgx085',title:'Getting rigorous with scientific rigor',author:'Hofseth',year:2017,venue:'Carcinogenesis',url:'https://doi.org/10.1093/carcin/bgx085',cat:'Competition Platforms & Methodology'},
+  {key:'LeakageSIGKDD',title:'Leakage in Data Mining: Formulation, Detection, and Avoidance',author:'Kaufman et al.',year:2011,venue:'Proceedings of the ACM SIGKDD International Conference on Knowledge Discovery and Data Mining',url:'https://doi.org/10.1145/2020408.2020496',cat:'Competition Platforms & Methodology'},
+  {key:'bellkor',title:'The bellkor solution to the netflix grand prize',author:'Koren',year:2009,venue:'',url:'',cat:'Competition Platforms & Methodology'},
+  {key:'DBLP:journals/corr/abs-2105-01160',title:'The Tracking Machine Learning challenge : Throughput phase',author:'Amrouche et al.',year:2021,venue:'CoRR',url:'https://arxiv.org/abs/2105.01160',cat:'Physical Sciences'},
+  {key:'pmlr-v42-cowa14',title:'The Higgs boson machine learning challenge',author:'Adam-Bourdarios et al.',year:2015,venue:'Proceedings of the NIPS 2014 Workshop on High-energy Physics and Machine Learning',url:'https://proceedings.mlr.press/v42/cowa14.html',cat:'Physical Sciences'},
+  {key:'adambourdarios:hal-01104487',title:'Learning to discover: the Higgs boson machine learning challenge',author:'Adam-Bourdarios et al.',year:2014,venue:'',url:'https://hal.inria.fr/hal-01104487',cat:'Physical Sciences'},
+  {key:'ATLAS-CONF-2013-108',title:'Evidence for Higgs Boson Decays to the $\\tau^+\\tau^-$ Final State with the ATLAS Detector',author:'Unknown',year:2013,venue:'',url:'http://cds.cern.ch/record/1632191',cat:'Physical Sciences'},
+  {key:'https://doi.org/10.48550/arxiv.2204.07123',title:'Retrospective on the 2021 BASALT Competition on Learning from Human Feedback',author:'Shah et al.',year:2022,venue:'',url:'https://arxiv.org/abs/2204.07123',cat:'Other'},
+  {key:'https://doi.org/10.48550/arxiv.2012.08520',title:'Machine Learning scientific competitions and datasets',author:'Rousseau et al.',year:2020,venue:'',url:'https://arxiv.org/abs/2012.08520',cat:'Other'},
+  {key:'https://doi.org/10.1111/j.1749-6632.2009.04497.x',title:'Lessons from the DREAM2 Challenges',author:'Stolovitzky et al.',year:2009,venue:'Annals of the New York Academy of Sciences',url:'https://nyaspubs.onlinelibrary.wiley.com/doi/abs/10.1111/j.1749-6632.2009.04497.x',cat:'Other'}
+];
+
+const CATS = [
+  {name:"LLM Benchmarks & Evaluation",      icon:"🤖", color:"#6366f1"},
+  {name:"AI Agents & Agentic AI",            icon:"🕹️", color:"#8b5cf6"},
+  {name:"Data-Centric AI",                   icon:"🗄️", color:"#0ea5e9"},
+  {name:"AutoML & Meta-Learning",            icon:"⚙️", color:"#10b981"},
+  {name:"Computer Vision",                   icon:"👁️", color:"#f59e0b"},
+  {name:"NLP & Information Retrieval",       icon:"📝", color:"#ef4444"},
+  {name:"Robotics, RL & Autonomous Systems", icon:"🤖", color:"#ec4899"},
+  {name:"Biology & Medical Imaging",         icon:"🧬", color:"#14b8a6"},
+  {name:"Competition Platforms & Methodology",icon:"🏆", color:"#f97316"},
+  {name:"Physical Sciences",                 icon:"⚛️", color:"#64748b"},
+];
+const catMap = Object.fromEntries(CATS.map(c => [c.name, c]));
+
+let activeFilter = 'all';
+let currentView  = 'topic';
+
+// Build nav pills
+const nav = document.getElementById('cat-nav');
+const allPill = document.createElement('button');
+allPill.className = 'cat-pill active';
+allPill.dataset.cat = 'all';
+allPill.innerHTML = `All <span class="pill-count">${REFS.length}</span>`;
+allPill.style.borderColor = '#3b4260';
+allPill.onclick = () => setFilter('all', allPill);
+nav.appendChild(allPill);
+
+CATS.forEach(c => {
+  const count = REFS.filter(r => r.cat === c.name).length;
+  if (!count) return;
+  const btn = document.createElement('button');
+  btn.className = 'cat-pill';
+  btn.dataset.cat = c.name;
+  btn.innerHTML = `${c.icon} ${c.name} <span class="pill-count">${count}</span>`;
+  btn.onclick = () => setFilter(c.name, btn);
+  nav.appendChild(btn);
+});
+
+function setFilter(cat, el) {
+  activeFilter = cat;
+  document.querySelectorAll('.cat-pill').forEach(p => {
+    p.classList.remove('active');
+    p.style.background = '';
+    p.style.borderColor = '';
+    p.style.color = '';
+  });
+  el.classList.add('active');
+  if (cat !== 'all') {
+    const c = catMap[cat];
+    el.style.background = c.color;
+    el.style.borderColor = c.color;
+    el.style.color = '#fff';
+  } else {
+    el.style.borderColor = '#3b4260';
+  }
+  render();
+}
+
+function setView(v, el) {
+  currentView = v;
+  document.querySelectorAll('.seg button').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function getFiltered() {
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  const sort = document.getElementById('sort-select').value;
+  let data = REFS.filter(r => {
+    if (activeFilter !== 'all' && r.cat !== activeFilter) return false;
+    if (!q) return true;
+    return (r.title+r.author+r.venue+r.year).toLowerCase().includes(q);
+  });
+  if (sort === 'year-desc') data.sort((a,b) => b.year - a.year || a.title.localeCompare(b.title));
+  else if (sort === 'year-asc') data.sort((a,b) => a.year - b.year || a.title.localeCompare(b.title));
+  else data.sort((a,b) => a.title.localeCompare(b.title));
+  return data;
+}
+
+function makeCard(r, idx) {
+  const c = catMap[r.cat] || {color:'#888'};
+  const yearStr = r.year > 0 ? r.year : '—';
+  const link = r.url
+    ? `<a class="ref-link" href="${r.url}" target="_blank" rel="noopener">
+         <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+           <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+         </svg>
+         Link
+       </a>`
+    : '';
+  const titleContent = r.url
+    ? `<a href="${r.url}" target="_blank" rel="noopener">${r.title}</a>`
+    : r.title;
+  const venueShort = r.venue.length > 90 ? r.venue.slice(0,87)+'…' : r.venue;
+  return `
+  <div class="ref-card" style="animation-delay:${Math.min(idx*18,300)}ms">
+    <div class="ref-year">${yearStr}</div>
+    <div class="ref-body">
+      <div class="ref-title">${titleContent}</div>
+      <div class="ref-meta">
+        <span class="ref-authors">${r.author}</span>
+        ${venueShort ? `<span class="ref-venue" title="${r.venue}">${venueShort}</span>` : ''}
+        ${link}
+      </div>
+    </div>
+  </div>`;
+}
+
+function render() {
+  const data = getFiltered();
+  const root = document.getElementById('list-root');
+  const empty = document.getElementById('empty');
+  const count = document.getElementById('result-count');
+  count.textContent = `${data.length} / ${REFS.length}`;
+
+  if (!data.length) { root.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+
+  if (currentView === 'topic') {
+    // Group by category in CATS order
+    const groups = {};
+    data.forEach(r => { (groups[r.cat] = groups[r.cat]||[]).push(r); });
+    let html = '';
+    CATS.forEach(c => {
+      const items = groups[c.name];
+      if (!items || !items.length) return;
+      html += `<div class="section-header">
+        <span class="section-icon">${c.icon}</span>
+        <span class="section-title" style="color:${c.color}">${c.name}</span>
+        <span class="section-count">${items.length} ref${items.length!==1?'s':''}</span>
+      </div>`;
+      items.forEach((r,i) => { html += makeCard(r,i); });
+    });
+    // Uncategorized
+    const uncatItems = data.filter(r => !CATS.find(c=>c.name===r.cat));
+    if (uncatItems.length) {
+      html += `<div class="section-header"><span class="section-title">Other</span></div>`;
+      uncatItems.forEach((r,i) => { html += makeCard(r,i); });
+    }
+    root.innerHTML = html;
+
+  } else {
+    // Timeline view: group by year descending
+    const byYear = {};
+    data.forEach(r => { const y = r.year > 0 ? r.year : 0; (byYear[y]=byYear[y]||[]).push(r); });
+    const years = Object.keys(byYear).map(Number).sort((a,b)=>b-a);
+    let html = '';
+    years.forEach(y => {
+      html += `<div class="timeline-year-group">
+        <div class="year-marker">${y||'undated'}</div>`;
+      byYear[y].forEach((r,i) => { html += makeCard(r,i); });
+      html += `</div>`;
+    });
+    root.innerHTML = html;
+  }
+}
+
+// Stats
+document.getElementById('stat-total').textContent = REFS.length;
+document.getElementById('stat-linked').textContent = REFS.filter(r=>r.url).length;
+
+document.getElementById('search').addEventListener('input', render);
+render();
+</script>
+</body>
+</html>

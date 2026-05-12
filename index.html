@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Academic Competitions — Survey Chapter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:     #07080d;
+  --surf:   #0d0e18;
+  --surf2:  #131522;
+  --border: #1c1e2e;
+  --text:   #e0e3f2;
+  --muted:  #6b7094;
+  --gold:   #c9a84c;
+  --blue:   #4f87e8;
+  --purple: #8b72e8;
+  --green:  #3ecf8e;
+  --red:    #e85f5f;
+  --teal:   #34d1bf;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; line-height: 1.65; }
+
+/* ── DECORATIVE BG ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(79,135,232,.05) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 100%, rgba(139,114,232,.06) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 50% 50%, rgba(62,207,142,.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 72px 48px 60px;
+  border-bottom: 1px solid var(--border);
+  max-width: 900px; margin: 0 auto;
+}
+.kicker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.kicker::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 700; line-height: 1.1; letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+h1 em { font-style: italic; color: var(--gold); }
+.authors {
+  font-size: 13.5px; color: var(--muted); margin-bottom: 28px;
+  display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+}
+.author { color: var(--text); font-weight: 500; }
+.sep { color: var(--border); }
+.abstract-block {
+  border-left: 3px solid var(--gold);
+  padding: 16px 20px;
+  background: var(--surf);
+  border-radius: 0 8px 8px 0;
+  font-size: 14px; line-height: 1.75; color: #b8bccc;
+  margin-bottom: 32px;
+  font-style: italic;
+}
+.keywords {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.kw {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; padding: 4px 11px; border-radius: 999px;
+  background: var(--surf2); border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+/* ── MAIN CONTENT ── */
+.content { max-width: 900px; margin: 0 auto; padding: 0 48px 80px; }
+
+/* ── RESOURCE CARDS ── */
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; text-transform: uppercase; letter-spacing: .15em;
+  color: var(--muted); margin: 52px 0 18px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+
+.res-card {
+  display: flex; flex-direction: column;
+  padding: 22px 22px 20px;
+  background: var(--surf); border: 1px solid var(--border);
+  border-radius: 10px; text-decoration: none; color: inherit;
+  transition: border-color .2s, transform .2s, background .2s;
+  position: relative; overflow: hidden;
+}
+.res-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--card-color, var(--blue));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .2s;
+}
+.res-card:hover { border-color: var(--card-color, var(--blue)); transform: translateY(-3px); background: var(--surf2); }
+.res-card:hover::before { transform: scaleX(1); }
+
+.card-icon { font-size: 26px; margin-bottom: 12px; line-height: 1; }
+.card-name {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 15px; font-weight: 500; margin-bottom: 6px;
+  color: var(--text);
+}
+.card-desc { font-size: 12.5px; color: var(--muted); line-height: 1.55; flex: 1; }
+.card-arrow {
+  margin-top: 16px; font-size: 11px; font-family: 'IBM Plex Mono', monospace;
+  color: var(--card-color, var(--blue)); display: flex; align-items: center; gap: 5px;
+}
+
+/* ── STRUCTURE ── */
+.toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.toc-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex; gap: 14px; align-items: baseline;
+}
+.toc-item:nth-child(odd) { padding-right: 28px; border-right: 1px solid var(--border); }
+.toc-item:nth-child(even) { padding-left: 28px; }
+.toc-num {
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--gold);
+  flex-shrink: 0; min-width: 24px;
+}
+.toc-text { font-size: 13.5px; color: var(--muted); }
+.toc-text strong { color: var(--text); font-weight: 500; display: block; font-size: 13.5px; }
+
+/* ── IMPACT STATS ── */
+.stats-row {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px; margin-top: 0;
+}
+.stat-card {
+  padding: 20px; background: var(--surf); border: 1px solid var(--border);
+  border-radius: 10px; text-align: center;
+}
+.stat-n {
+  font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700;
+  color: var(--text); display: block; margin-bottom: 4px;
+}
+.stat-l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border); padding: 28px 48px;
+  max-width: 900px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+}
+.footer-text { font-size: 12px; color: var(--muted); }
+.footer-text a { color: var(--blue); text-decoration: none; }
+.footer-text a:hover { text-decoration: underline; }
+.openreview-badge {
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  padding: 6px 14px; border-radius: 6px;
+  background: var(--surf2); border: 1px solid var(--border);
+  color: var(--muted); text-decoration: none; transition: border-color .15s, color .15s;
+}
+.openreview-badge:hover { border-color: var(--gold); color: var(--gold); }
+
+@media (max-width: 620px) {
+  header, .content, footer { padding-left: 22px; padding-right: 22px; }
+  .toc-grid { grid-template-columns: 1fr; }
+  .toc-item:nth-child(odd) { border-right: none; padding-right: 0; }
+  .toc-item:nth-child(even) { padding-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">DMLR Survey Chapter · 2023</div>
+  <h1>Academic<br/><em>Competitions</em></h1>
+  <div class="authors">
+    <span class="author">Hugo Jair Escalante</span>
+    <span class="sep">·</span>
+    <span>INAOE &amp; UT El Paso</span>
+    <span class="sep">·</span>
+    <span class="author">Aleksandra Kruchinina</span>
+    <span class="sep">·</span>
+    <span>Université Paris Saclay</span>
+  </div>
+  <div class="abstract-block">
+    Competitions comprise effective means for advancing the state of the art, putting in the spotlight of a scientific community specific topics and problems, and closing the gap for under-represented communities. This chapter surveys academic challenges in the context of machine learning and related fields — reviewing the most influential competitions, analyzing challenges per area of knowledge, and outlining open questions for the years ahead.
+  </div>
+  <div class="keywords">
+    <span class="kw">Academic Competitions</span>
+    <span class="kw">Survey</span>
+    <span class="kw">Machine Learning</span>
+    <span class="kw">Benchmarks</span>
+    <span class="kw">Challenge Design</span>
+    <span class="kw">LLMs</span>
+    <span class="kw">Agentic AI</span>
+    <span class="kw">Data-Centric AI</span>
+  </div>
+</header>
+
+<div class="content">
+
+  <!-- Repository resources -->
+  <div class="section-label">Repository resources</div>
+  <div class="resource-grid">
+
+    <a class="res-card" href="references.html" style="--card-color: #4f87e8">
+      <div class="card-icon">📚</div>
+      <div class="card-name">Reference Library</div>
+      <div class="card-desc">All 157 bibliographic entries from the chapter, organized by topic and searchable. Includes direct links to papers and preprints.</div>
+      <div class="card-arrow">Browse references →</div>
+    </a>
+
+    <a class="res-card" href="links.html" style="--card-color: #8b72e8">
+      <div class="card-icon">🔗</div>
+      <div class="card-name">Resource Links</div>
+      <div class="card-desc">All 119 URLs cited in the paper — competition platforms, challenge pages, datasets, simulators, and tools — organized by category.</div>
+      <div class="card-arrow">Browse links →</div>
+    </a>
+
+  </div>
+
+  <!-- Paper stats -->
+  <div class="section-label">At a glance</div>
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-n" style="color:#c9a84c">157</span>
+      <span class="stat-l">References</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-n" style="color:#4f87e8">119</span>
+      <span class="stat-l">Cited URLs</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-n" style="color:#3ecf8e">10</span>
+      <span class="stat-l">Fields Covered</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-n" style="color:#e85f5f">1714</span>
+      <span class="stat-l">Earliest challenge</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-n" style="color:#8b72e8">25+</span>
+      <span class="stat-l">Conference tracks</span>
+    </div>
+  </div>
+
+  <!-- Chapter structure -->
+  <div class="section-label">Chapter structure</div>
+  <div class="toc-grid">
+    <div class="toc-item">
+      <span class="toc-num">§ 1</span>
+      <div class="toc-text"><strong>Introduction</strong>Definitions, scope, and the two types of competitions: academic vs. industrial.</div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">§ 2</span>
+      <div class="toc-text"><strong>Past &amp; Present</strong>Historical review from the 1714 Longitude Act to modern challenge platforms; benefits and pitfalls.</div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">§ 3</span>
+      <div class="toc-text"><strong>Challenges by Field</strong>Surveys across ML, Computer Vision, NLP, Biology, and Autonomous Driving.</div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">§ 4</span>
+      <div class="toc-text"><strong>Foundation Model Era</strong>New sections on LLM benchmarks, agentic AI challenges, and data-centric competitions.</div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">§ 5</span>
+      <div class="toc-text"><strong>Discussion</strong>Future directions: multimodal LLMs, cooperative competitions, challenges for education, and AI for good.</div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">App</span>
+      <div class="toc-text"><strong>Bibliography</strong>Full reference list with 157 entries spanning 1975–2025.</div>
+    </div>
+  </div>
+
+  <!-- Topics covered -->
+  <div class="section-label">Fields surveyed</div>
+  <div class="resource-grid">
+    <div class="res-card" style="--card-color:#6366f1; cursor:default">
+      <div class="card-icon">🤖</div>
+      <div class="card-name">LLM Benchmarks</div>
+      <div class="card-desc">GLUE, SuperGLUE, BIG-bench, HELM, HumanEval, SWE-bench, Chatbot Arena, MMLU, and safety/red-teaming challenges.</div>
+    </div>
+    <div class="res-card" style="--card-color:#8b5cf6; cursor:default">
+      <div class="card-icon">🕹</div>
+      <div class="card-name">AI Agents</div>
+      <div class="card-desc">WebArena, OSWorld, GAIA, MineRL, Melting Pot, tool-use leaderboards, and multi-agent evaluation frameworks.</div>
+    </div>
+    <div class="res-card" style="--card-color:#f59e0b; cursor:default">
+      <div class="card-icon">👁</div>
+      <div class="card-name">Computer Vision</div>
+      <div class="card-desc">ImageNet, PASCAL VOC, COCO, ChaLearn LAP (gesture, age, face anti-spoofing), NTIRE, ActivityNet, VQA.</div>
+    </div>
+    <div class="res-card" style="--card-color:#ef4444; cursor:default">
+      <div class="card-icon">📝</div>
+      <div class="card-name">NLP &amp; IR</div>
+      <div class="card-desc">TREC (1993–present), SemEval, CLEF, TRECVid, PAN, IberLEF, GermEval, EVALITA, and speech challenges.</div>
+    </div>
+    <div class="res-card" style="--card-color:#10b981; cursor:default">
+      <div class="card-icon">⚙</div>
+      <div class="card-name">AutoML</div>
+      <div class="card-desc">AutoML Challenge series (2015–2018), AutoDL, MetaDL, black-box optimization, and AutoML Decathlon.</div>
+    </div>
+    <div class="res-card" style="--card-color:#14b8a6; cursor:default">
+      <div class="card-icon">🧬</div>
+      <div class="card-name">Biology &amp; Medicine</div>
+      <div class="card-desc">MICCAI Grand Challenge, DREAM Challenges, CASP (AlphaFold / RoseTTAFold), Grand Challenge platform.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p class="footer-text">
+    Published in the <em>Data-centric Machine Learning Research (DMLR)</em> journal · 
+    Repository maintained by the authors ·
+    <a href="https://openreview.net/forum?id=Oc1taS2iYd" target="_blank" rel="noopener">OpenReview</a>
+  </p>
+  <a class="openreview-badge" href="https://openreview.net/forum?id=Oc1taS2iYd" target="_blank" rel="noopener">
+    View on OpenReview ↗
+  </a>
+</footer>
+
+</body>
+</html>
